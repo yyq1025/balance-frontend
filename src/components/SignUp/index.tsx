@@ -20,7 +20,7 @@ const SignUp = () => {
   }, [counter]);
 
   const sendCode = () => {
-    if (form.getFieldError("email")) {
+    if (form.getFieldError("email").length > 0) {
       console.log(form.getFieldError("email"));
       return;
     }
