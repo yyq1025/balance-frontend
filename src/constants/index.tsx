@@ -1,1 +1,1 @@
-export const BASE_URL = "https://testbalance.azurewebsites.net";
+export const BASE_URL = "https://balance-backend.azurewebsites.net";
