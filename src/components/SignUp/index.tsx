@@ -9,6 +9,7 @@ const { Title } = Typography;
 const SignUp = () => {
   const [form] = Form.useForm();
   const email = Form.useWatch("email", form);
+  const [submitting, setSubmitting] = React.useState(false);
   const [counter, setCounter] = React.useState(0);
 
   React.useEffect(() => {
@@ -25,7 +26,6 @@ const SignUp = () => {
       return;
     }
     console.log(email);
-    setCounter(60);
     fetch(BASE_URL + "/user/code", {
       method: "POST",
       body: JSON.stringify({ email: email }),
@@ -33,6 +33,7 @@ const SignUp = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setCounter(60);
       })
       .catch((err) => {
         console.log(err);
@@ -41,6 +42,7 @@ const SignUp = () => {
 
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
+    setSubmitting(true);
     fetch(BASE_URL + "/user/register", {
       method: "POST",
       body: JSON.stringify(values),
@@ -52,6 +54,7 @@ const SignUp = () => {
       .catch((err) => {
         console.log(err);
       });
+    setSubmitting(false);
   };
 
   return (
@@ -64,6 +67,7 @@ const SignUp = () => {
         }}
         onFinish={onFinish}
         form={form}
+        disabled={submitting}
       >
         <Form.Item
           name="email"
@@ -148,6 +152,7 @@ const SignUp = () => {
             type="primary"
             htmlType="submit"
             className="register-form-button"
+            loading={submitting}
           >
             Register
           </Button>

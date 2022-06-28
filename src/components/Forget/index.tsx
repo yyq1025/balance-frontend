@@ -1,13 +1,16 @@
 import React from "react";
 import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants";
 import "./index.css";
 const { Title } = Typography;
 
 const Forget = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const email = Form.useWatch("email", form);
+  const [submitting, setSubmitting] = React.useState(false);
   const [counter, setCounter] = React.useState(0);
 
   React.useEffect(() => {
@@ -24,7 +27,6 @@ const Forget = () => {
       return;
     }
     console.log(email);
-    setCounter(60);
     fetch(BASE_URL + "/user/code", {
       method: "POST",
       body: JSON.stringify({ email: email }),
@@ -32,6 +34,7 @@ const Forget = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setCounter(60);
       })
       .catch((err) => {
         console.log(err);
@@ -40,6 +43,7 @@ const Forget = () => {
 
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
+    setSubmitting(true);
     fetch(BASE_URL + "/user/password", {
       method: "PUT",
       body: JSON.stringify(values),
@@ -47,10 +51,12 @@ const Forget = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
       });
+    setSubmitting(false);
   };
 
   return (
@@ -63,6 +69,7 @@ const Forget = () => {
         }}
         onFinish={onFinish}
         form={form}
+        disabled={submitting}
       >
         <Form.Item
           name="email"
@@ -130,6 +137,7 @@ const Forget = () => {
             type="primary"
             htmlType="submit"
             className="forget-form-button"
+            loading={submitting}
           >
             Reset password
           </Button>

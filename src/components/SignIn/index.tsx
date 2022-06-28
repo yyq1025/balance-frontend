@@ -11,9 +11,11 @@ const { Title } = Typography;
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [submitting, setSubmitting] = React.useState(false);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
+    setSubmitting(true);
     fetch(BASE_URL + "/user/login", {
       method: "POST",
       body: JSON.stringify(values),
@@ -33,6 +35,7 @@ const SignIn = () => {
       .catch((err) => {
         console.log(err);
       });
+    setSubmitting(false);
   };
 
   return (
@@ -44,6 +47,7 @@ const SignIn = () => {
           remember: true,
         }}
         onFinish={onFinish}
+        disabled={submitting}
       >
         <Form.Item
           name="email"
@@ -92,6 +96,7 @@ const SignIn = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            loading={submitting}
           >
             Login
           </Button>
