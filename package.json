@@ -24,18 +24,6 @@
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,less,md}": [
-      "yarn prettier --write",
-      "yarn eslint --fix",
-      "git add"
-    ]
-  },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
@@ -66,8 +54,6 @@
     "eslint": "^8.18.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-react": "^7.30.1",
-    "husky": "8.0.1",
-    "lint-staged": "13.0.3",
     "prettier": "2.7.1"
   }
 }

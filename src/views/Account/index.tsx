@@ -1,7 +1,6 @@
 import React from "react";
-import { Layout, Typography, Menu, Button } from "antd";
+import { Layout, Typography, Menu } from "antd";
 import {
-  GlobalOutlined,
   WalletOutlined,
   SettingOutlined,
   PoweroffOutlined,
@@ -32,21 +31,16 @@ const AccountPage = () => {
               items={[
                 {
                   key: "1",
-                  icon: <GlobalOutlined />,
-                  label: "Networks",
-                },
-                {
-                  key: "2",
                   icon: <WalletOutlined />,
                   label: "Wallets",
                 },
                 {
-                  key: "3",
+                  key: "2",
                   icon: <SettingOutlined />,
                   label: "Settings",
                 },
                 {
-                  key: "4",
+                  key: "3",
                   icon: <PoweroffOutlined />,
                   label: "Logout",
                   onClick: () => {
