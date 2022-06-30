@@ -125,7 +125,7 @@ const AccountPage = () => {
           <Content style={{ padding: "0 24px 24px" }}>
             <Breadcrumb style={{ margin: "16px 0" }}>
               <Breadcrumb.Item>Account</Breadcrumb.Item>
-              <Breadcrumb.Item>Balances</Breadcrumb.Item>
+              <Breadcrumb.Item>{item}</Breadcrumb.Item>
             </Breadcrumb>
             <Space direction="vertical" size="middle" style={{ width: "100%" }}>
               <Card>
