@@ -1,14 +1,13 @@
 import React from "react";
 import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants";
+import { Button, Checkbox, Form, Input, Typography } from "antd";
+import { Link } from "react-router-dom";
+import { BASE_URL } from "../Constants";
 import "./index.css";
 const { Title } = Typography;
 
-const Forget = () => {
+const Register = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const email = Form.useWatch("email", form);
   const [submitting, setSubmitting] = React.useState(false);
   const [counter, setCounter] = React.useState(0);
@@ -44,14 +43,13 @@ const Forget = () => {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    fetch(BASE_URL + "/user/password", {
-      method: "PUT",
+    fetch(BASE_URL + "/user/register", {
+      method: "POST",
       body: JSON.stringify(values),
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
@@ -60,10 +58,10 @@ const Forget = () => {
   };
 
   return (
-    <div className="forget">
-      <Title level={3}>Reset password</Title>
+    <div className="register">
+      <Title level={3}>Register</Title>
       <Form
-        className="forget-form"
+        className="register-form"
         initialValues={{
           remember: true,
         }}
@@ -128,23 +126,41 @@ const Forget = () => {
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="New Password"
+            placeholder="Password"
           />
+        </Form.Item>
+
+        <Form.Item
+          name="agreement"
+          valuePropName="checked"
+          rules={[
+            {
+              validator: (_, value) =>
+                value
+                  ? Promise.resolve()
+                  : Promise.reject(new Error("Should accept agreement")),
+            },
+          ]}
+        >
+          <Checkbox>
+            I have read the <a href="">agreement</a>
+          </Checkbox>
         </Form.Item>
 
         <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
-            className="forget-form-button"
+            className="register-form-button"
             loading={submitting}
           >
-            Reset password
+            Register
           </Button>
+          Or <Link to="/login">login now!</Link>
         </Form.Item>
       </Form>
     </div>
   );
 };
 
-export default Forget;
+export default Register;

@@ -1,13 +1,14 @@
 import React from "react";
 import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { Link } from "react-router-dom";
-import { BASE_URL } from "../../constants";
+import { Button, Form, Input, Typography } from "antd";
+import { useNavigate, Link } from "react-router-dom";
+import { BASE_URL } from "../Constants";
 import "./index.css";
 const { Title } = Typography;
 
-const SignUp = () => {
+const Reset = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const email = Form.useWatch("email", form);
   const [submitting, setSubmitting] = React.useState(false);
   const [counter, setCounter] = React.useState(0);
@@ -43,13 +44,14 @@ const SignUp = () => {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    fetch(BASE_URL + "/user/register", {
-      method: "POST",
+    fetch(BASE_URL + "/user/password", {
+      method: "PUT",
       body: JSON.stringify(values),
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
@@ -58,10 +60,10 @@ const SignUp = () => {
   };
 
   return (
-    <div className="register">
-      <Title level={3}>Register</Title>
+    <div className="forget">
+      <Title level={3}>Reset password</Title>
       <Form
-        className="register-form"
+        className="forget-form"
         initialValues={{
           remember: true,
         }}
@@ -126,35 +128,18 @@ const SignUp = () => {
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="Password"
+            placeholder="New Password"
           />
-        </Form.Item>
-
-        <Form.Item
-          name="agreement"
-          valuePropName="checked"
-          rules={[
-            {
-              validator: (_, value) =>
-                value
-                  ? Promise.resolve()
-                  : Promise.reject(new Error("Should accept agreement")),
-            },
-          ]}
-        >
-          <Checkbox>
-            I have read the <a href="">agreement</a>
-          </Checkbox>
         </Form.Item>
 
         <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
-            className="register-form-button"
+            className="forget-form-button"
             loading={submitting}
           >
-            Register
+            Reset password
           </Button>
           Or <Link to="/login">login now!</Link>
         </Form.Item>
@@ -163,4 +148,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Reset;

@@ -1,15 +1,9 @@
-import { Button, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useState } from "react";
-
-interface Values {
-  title: string;
-  description: string;
-  modifier: string;
-}
+import { Button, Form, Input, Modal, Radio, Select } from "antd";
 
 interface QueryCreateFormProps {
   visible: boolean;
-  onCreate: (values: Values) => void;
+  onCreate: (values: any) => void;
   onCancel: () => void;
 }
 
@@ -19,6 +13,7 @@ const QueryCreateForm = ({
   onCancel,
 }: QueryCreateFormProps) => {
   const [form] = Form.useForm();
+
   return (
     <Modal
       visible={visible}
@@ -29,7 +24,7 @@ const QueryCreateForm = ({
       onOk={() => {
         form
           .validateFields()
-          .then((values: Values) => {
+          .then((values) => {
             form.resetFields();
             onCreate(values);
           })

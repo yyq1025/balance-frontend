@@ -3,12 +3,12 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 import jwt_decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
-import { BASE_URL } from "../../constants";
+import { BASE_URL } from "../Constants";
 import { useAppDispatch } from "../../hooks";
 import "./index.css";
 const { Title } = Typography;
 
-const SignIn = () => {
+const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [submitting, setSubmitting] = React.useState(false);
@@ -30,7 +30,7 @@ const SignIn = () => {
         const email = res?.email;
         const token = res?.token;
         dispatch({ type: "LOGIN", payload: { email, token } });
-        navigate("/account");
+        navigate("/account/balances");
       })
       .catch((err) => {
         console.log(err);
@@ -107,4 +107,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Login;
