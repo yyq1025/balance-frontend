@@ -1,11 +1,12 @@
 import React from "react";
 import { Layout, Typography, Row, Col, Card, Avatar, Space } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { BASE_URL } from "../../constants";
 import "./index.css";
 const { Header, Footer, Sider, Content } = Layout;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface Network {
   name: string;
@@ -46,6 +47,7 @@ const HomePage = () => {
                       <Title level={5}>{network.name}</Title>
                     </Space>
                   }
+                  bordered={false}
                   actions={[
                     <PlusCircleOutlined
                       key="add"
@@ -53,9 +55,13 @@ const HomePage = () => {
                     />,
                     <SwapOutlined key="set" />,
                   ]}
-                  className="network-card"
                 >
-                  <Text copyable type="secondary">
+                  <Text
+                    ellipsis
+                    copyable
+                    type="secondary"
+                    style={{ width: "100%" }}
+                  >
                     {network.url}
                   </Text>
                 </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.less";
 import HomePage from "./views/Home";
 import LoginPage from "./views/Login";
@@ -13,7 +13,8 @@ const App = () => (
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/reset" element={<ResetPage />} />
-    <Route path="/account" element={<AccountPage />} />
+    <Route path="/account" element={<Navigate to="./balances" />} />
+    <Route path="/account/:item" element={<AccountPage />} />
   </Routes>
 );
 
