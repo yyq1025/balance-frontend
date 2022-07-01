@@ -20,8 +20,9 @@ const Settings = ({ user }: SettingsProps) => {
         backgroundColor: "#fff",
       }}
     >
-      <Typography.Title level={4}>Reset Password</Typography.Title>
-      <Divider />
+      <Divider orientation="left" orientationMargin="0">
+        <Typography.Title level={4}>Reset Password</Typography.Title>
+      </Divider>
       <Form layout="vertical" initialValues={{ email: user.email }}>
         <Form.Item name="email" label="Email">
           <Input disabled />
@@ -54,12 +55,12 @@ const Settings = ({ user }: SettingsProps) => {
           </Button>
         </Form.Item>
       </Form>
-      <Typography.Title level={4}>Logout</Typography.Title>
-      <Divider />
+      <Divider orientation="left" orientationMargin="0">
+        <Typography.Title level={4}>Logout</Typography.Title>
+      </Divider>
       <Button
         type="primary"
         danger
-        icon={<PoweroffOutlined />}
         onClick={() => dispatch({ type: "LOGOUT" })}
       >
         Logout

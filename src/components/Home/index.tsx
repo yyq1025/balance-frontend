@@ -20,7 +20,7 @@ const Home = () => {
     fetch(BASE_URL + "/network", { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
-        setNetworks(data.networks);
+        setNetworks(data.networks || []);
       });
   }, []);
 

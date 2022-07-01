@@ -1,61 +1,38 @@
 import React from "react";
-import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Typography } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Typography, message } from "antd";
 import { useNavigate, Link } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 import { BASE_URL } from "../Constants";
+import { Code } from "../Utils";
 import "./index.css";
 const { Title } = Typography;
 
 const Reset = () => {
-  const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const email = Form.useWatch("email", form);
   const [submitting, setSubmitting] = React.useState(false);
-  const [counter, setCounter] = React.useState(0);
 
-  React.useEffect(() => {
-    const timer =
-      counter > 0
-        ? setInterval(() => setCounter(counter - 1), 1000)
-        : undefined;
-    return () => clearInterval(timer);
-  }, [counter]);
-
-  const sendCode = () => {
-    if (form.getFieldError("email").length > 0) {
-      console.log(form.getFieldError("email"));
-      return;
-    }
-    console.log(email);
-    fetch(BASE_URL + "/user/code", {
-      method: "POST",
-      body: JSON.stringify({ email: email }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setCounter(60);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    fetch(BASE_URL + "/user/password", {
-      method: "PUT",
-      body: JSON.stringify(values),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        navigate("/login");
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const res = await axios.put(`${BASE_URL}/user/password`, values, {
+        timeout: 5000,
       });
+      console.log(res);
+      message.success(res.data.message);
+      navigate("/login");
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      console.log(err);
+      if (err.response?.data) {
+        message.error(err.response.data.message);
+      } else {
+        message.error(err.message);
+      }
+    }
     setSubmitting(false);
   };
 
@@ -64,9 +41,6 @@ const Reset = () => {
       <Title level={3}>Reset password</Title>
       <Form
         className="forget-form"
-        initialValues={{
-          remember: true,
-        }}
         onFinish={onFinish}
         form={form}
         disabled={submitting}
@@ -89,34 +63,7 @@ const Reset = () => {
             placeholder="Email"
           />
         </Form.Item>
-        <Form.Item>
-          <Input.Group compact>
-            <Form.Item
-              name="code"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: "Please input the code you got!",
-                },
-              ]}
-            >
-              <Input
-                prefix={<KeyOutlined className="site-form-item-icon" />}
-                placeholder="Code"
-                style={{ width: "70%" }}
-              />
-            </Form.Item>
-            <Button
-              style={{ width: "30%" }}
-              type="primary"
-              onClick={sendCode}
-              disabled={counter > 0}
-            >
-              {counter > 0 ? `${counter}s` : "Get code"}
-            </Button>
-          </Input.Group>
-        </Form.Item>
+        <Code email={email} />
         <Form.Item
           name="password"
           rules={[
@@ -131,7 +78,6 @@ const Reset = () => {
             placeholder="New Password"
           />
         </Form.Item>
-
         <Form.Item>
           <Button
             type="primary"

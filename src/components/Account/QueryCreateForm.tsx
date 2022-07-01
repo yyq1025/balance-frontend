@@ -13,27 +13,34 @@ const QueryCreateForm = ({
   onCancel,
 }: QueryCreateFormProps) => {
   const [form] = Form.useForm();
+  const [submitting, setSubmitting] = React.useState(false);
 
   return (
     <Modal
       visible={visible}
       title="Create a new query"
       okText="Create"
+      okButtonProps={submitting ? { disabled: true, loading: true } : {}}
       cancelText="Cancel"
       onCancel={onCancel}
-      onOk={() => {
-        form
-          .validateFields()
-          .then((values) => {
-            form.resetFields();
-            onCreate(values);
-          })
-          .catch((info) => {
-            console.log("Validate Failed:", info);
-          });
+      onOk={async () => {
+        setSubmitting(true);
+        try {
+          const values = await form.validateFields();
+          form.resetFields();
+          await onCreate(values);
+        } catch (info) {
+          console.log("Validate Failed:", info);
+        }
+        setSubmitting(false);
       }}
     >
-      <Form form={form} layout="vertical" name="form_in_modal">
+      <Form
+        form={form}
+        layout="vertical"
+        disabled={submitting}
+        initialValues={{ network: "Ethereum" }}
+      >
         <Form.Item
           name="address"
           label="Address"

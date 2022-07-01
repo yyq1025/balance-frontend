@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Row, Button, Space, Avatar, Typography } from "antd";
 import { useAppSelector, useAppDispatch } from "../../hooks";
@@ -15,7 +15,7 @@ const Navbar = () => {
   const location = useLocation();
 
   // Logout when token expired
-  React.useEffect(() => {
+  useEffect(() => {
     const token = user?.token;
 
     if (token) {
@@ -31,7 +31,7 @@ const Navbar = () => {
       <Row justify="space-between">
         <Link to="/" className="logo" />
         {user?.email ? (
-          <Link to="/account">
+          <Link to="/account/balances">
             <Space>
               <Avatar
                 icon={<UserOutlined />}

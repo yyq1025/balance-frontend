@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Space, Card, Button, Typography, Row, Col } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Space, Card, Button, Typography, Row, Col, message } from "antd";
+import { PlusOutlined, SyncOutlined, DeleteOutlined } from "@ant-design/icons";
+import axios, { AxiosError } from "axios";
 import { useAppSelector } from "../../hooks";
 import QueryCreateForm from "./QueryCreateForm";
 import { BASE_URL } from "../Constants";
@@ -10,7 +11,7 @@ interface Balance {
   network: string;
   token: string;
   symbol: string;
-  balance: number;
+  balance: number | string;
   tag?: string;
 }
 
@@ -22,36 +23,51 @@ const Balances = ({ user }: BalancesProps) => {
   const [visible, setVisible] = useState(false);
   const [balances, setBalances] = useState<Balance[]>([]);
 
-  const onCreate = (values: any) => {
-    console.log("Received values of form: ", JSON.stringify(values));
-    fetch(`${BASE_URL}/wallet`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${user.token}` },
-      body: JSON.stringify(values),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+  const fetchBalances = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/wallet/balance`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+        timeout: 5000,
       });
+      console.log(res);
+      setBalances(res.data.wallets || []);
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      console.log(err);
+      if (err.response?.data) {
+        message.error(err.response.data.message);
+      } else {
+        message.error(err.message);
+      }
+    }
+  };
+
+  const onCreate = async (values: any) => {
+    console.log("Received values of form: ", values);
+    try {
+      const res = await axios.post(`${BASE_URL}/wallet`, values, {
+        headers: { Authorization: `Bearer ${user.token}` },
+        timeout: 5000,
+      });
+      console.log(res);
+      message.success(res.data.message);
+      fetchBalances();
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      console.log(err);
+      if (err.response?.data) {
+        message.error(err.response.data.message);
+      } else {
+        message.error(err.message);
+      }
+    }
     setVisible(false);
   };
 
   useEffect(() => {
-    fetch(`${BASE_URL}/wallet/balance`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setBalances(res.wallets);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetchBalances();
   }, []);
 
   return (
@@ -84,12 +100,16 @@ const Balances = ({ user }: BalancesProps) => {
                 </Typography.Title>
               }
               actions={[
-                <EditOutlined key="edit" />,
+                <SyncOutlined key="sync" />,
                 <DeleteOutlined key="delete" />,
               ]}
             >
               <Card.Meta
-                title={balance.balance + " " + balance.symbol}
+                title={
+                  typeof balance.balance === "string"
+                    ? balance.balance
+                    : balance.balance + " " + balance.symbol
+                }
                 description={balance.network}
               />
             </Card>

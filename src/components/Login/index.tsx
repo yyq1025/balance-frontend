@@ -1,6 +1,7 @@
 import React from "react";
+import axios, { AxiosError } from "axios";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Form, Input, Typography, message } from "antd";
 import jwt_decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../Constants";
@@ -16,25 +17,24 @@ const Login = () => {
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    fetch(BASE_URL + "/user/login", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Login failed");
-        }
-        return res.json();
-      })
-      .then((res) => {
-        const email = res?.email;
-        const token = res?.token;
-        dispatch({ type: "LOGIN", payload: { email, token } });
-        navigate("/account/balances");
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const response = await axios.post(`${BASE_URL}/user/login`, values, {
+        timeout: 5000,
       });
+      console.log(response);
+      message.success("Login Successful");
+      const { email, token } = response.data;
+      dispatch({ type: "LOGIN", payload: { email, token } });
+      navigate("/account/balances");
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      console.log(err);
+      if (err.response?.data) {
+        message.error(err.response.data.message);
+      } else {
+        message.error(err.message);
+      }
+    }
     setSubmitting(false);
   };
 
