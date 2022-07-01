@@ -13,7 +13,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/validator": "^13.7.3",
-    "antd": "^4.21.3",
+    "antd": "^4.21.4",
     "axios": "^0.27.2",
     "craco-less": "^2.0.0",
     "eslint-plugin-prettier": "^4.1.0",
