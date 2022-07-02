@@ -51,7 +51,7 @@ const Balances = ({ user }: BalancesProps) => {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/wallet/`, {
+      .get(`${BASE_URL}/wallet/balance`, {
         headers: { Authorization: `Bearer ${user.token}` },
         timeout: 5000,
       })
