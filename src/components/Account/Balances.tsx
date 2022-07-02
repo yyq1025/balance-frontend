@@ -39,7 +39,7 @@ const Balances = ({ user }: BalancesProps) => {
   const [balances, setBalances] = useState<Balance[]>([]);
 
   const onCreate = async (values: any) => {
-    const res = await axios.post(`${BASE_URL}/wallet`, values, {
+    const res = await axios.post(`${BASE_URL}/wallet/`, values, {
       headers: { Authorization: `Bearer ${user.token}` },
       timeout: 5000,
     });
