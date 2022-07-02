@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Space, Card, Button, Typography, Row, Col, message } from "antd";
-import { PlusOutlined, SyncOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  Space,
+  Card,
+  Button,
+  Typography,
+  Row,
+  Col,
+  message,
+  Modal,
+} from "antd";
+import {
+  PlusOutlined,
+  SyncOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import axios, { AxiosError } from "axios";
 import { useAppSelector } from "../../hooks";
 import QueryCreateForm from "./QueryCreateForm";
 import { BASE_URL } from "../Constants";
 
 interface Balance {
+  id: number;
   address: string;
   network: string;
   token: string;
   symbol: string;
-  balance: number | string;
+  balance: string;
   tag?: string;
 }
 
@@ -23,37 +38,49 @@ const Balances = ({ user }: BalancesProps) => {
   const [visible, setVisible] = useState(false);
   const [balances, setBalances] = useState<Balance[]>([]);
 
-  const fetchBalances = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/wallet/balance`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-        timeout: 5000,
-      });
-      console.log(res);
-      setBalances(res.data.wallets || []);
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      console.log(err);
-      if (err.response?.data) {
-        message.error(err.response.data.message);
-      } else {
-        message.error(err.message);
-      }
-    }
+  const onCreate = async (values: any) => {
+    const res = await axios.post(`${BASE_URL}/wallet`, values, {
+      headers: { Authorization: `Bearer ${user.token}` },
+      timeout: 5000,
+    });
+    console.log(res);
+    message.success("Query created successfully");
+    setVisible(false);
+    setBalances((prevBalances) => [...prevBalances, res.data.balance]);
   };
 
-  const onCreate = async (values: any) => {
-    console.log("Received values of form: ", values);
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/wallet/`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+        timeout: 5000,
+      })
+      .then((res) => {
+        console.log(res);
+        setBalances(res.data.balances || []);
+      })
+      .catch((error) => {
+        const err = error as AxiosError<any>;
+        console.log(err);
+        if (err.response?.data) {
+          message.error(err.response.data.message);
+        } else {
+          message.error(err.message);
+        }
+      });
+  }, []);
+
+  const onDelete = async (id: number) => {
     try {
-      const res = await axios.post(`${BASE_URL}/wallet`, values, {
+      const res = await axios.delete(`${BASE_URL}/wallet/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
         timeout: 5000,
       });
       console.log(res);
-      message.success(res.data.message);
-      fetchBalances();
+      message.success("Query deleted successfully");
+      setBalances((prevBalances) =>
+        prevBalances.filter((balance) => balance.id !== id)
+      );
     } catch (error) {
       const err = error as AxiosError<any>;
       console.log(err);
@@ -63,12 +90,7 @@ const Balances = ({ user }: BalancesProps) => {
         message.error(err.message);
       }
     }
-    setVisible(false);
   };
-
-  useEffect(() => {
-    fetchBalances();
-  }, []);
 
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
@@ -101,14 +123,29 @@ const Balances = ({ user }: BalancesProps) => {
               }
               actions={[
                 <SyncOutlined key="sync" />,
-                <DeleteOutlined key="delete" />,
+                <DeleteOutlined
+                  key="delete"
+                  onClick={() => {
+                    Modal.confirm({
+                      title: "Are you sure delete this query?",
+                      icon: <ExclamationCircleOutlined />,
+                      content: "This will permanently delete this query.",
+                      okText: "Yes",
+                      okType: "danger",
+                      cancelText: "No",
+                      onOk() {
+                        return onDelete(balance.id);
+                      },
+                    });
+                  }}
+                />,
               ]}
             >
               <Card.Meta
                 title={
-                  typeof balance.balance === "string"
-                    ? balance.balance
-                    : balance.balance + " " + balance.symbol
+                  balance.balance
+                    ? balance.balance + " " + balance.symbol
+                    : "Cannot get balance"
                 }
                 description={balance.network}
               />

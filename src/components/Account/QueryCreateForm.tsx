@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Modal, Radio, Select } from "antd";
+import { Button, Form, Input, Modal, Radio, Select, message } from "antd";
+import axios, { AxiosError } from "axios";
 
 interface QueryCreateFormProps {
   visible: boolean;
-  onCreate: (values: any) => void;
+  onCreate: (values: any) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -27,10 +28,18 @@ const QueryCreateForm = ({
         setSubmitting(true);
         try {
           const values = await form.validateFields();
-          form.resetFields();
           await onCreate(values);
-        } catch (info) {
-          console.log("Validate Failed:", info);
+          form.resetFields();
+        } catch (error) {
+          console.log(error);
+          if (axios.isAxiosError(error)) {
+            const axiosError = error as AxiosError<any>;
+            if (axiosError.response?.data) {
+              message.error(axiosError.response.data.message);
+            } else {
+              message.error(axiosError.message);
+            }
+          }
         }
         setSubmitting(false);
       }}
