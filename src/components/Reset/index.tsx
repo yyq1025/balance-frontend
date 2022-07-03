@@ -5,7 +5,6 @@ import { useNavigate, Link } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { BASE_URL } from "../Constants";
 import { Code } from "../Utils";
-import "./index.css";
 const { Title } = Typography;
 
 const Reset = () => {

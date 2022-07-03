@@ -3,7 +3,6 @@ import { Layout, Typography, Row, Col, Card, Avatar, Space } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../Constants";
-import "./index.css";
 const { Header, Footer, Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 

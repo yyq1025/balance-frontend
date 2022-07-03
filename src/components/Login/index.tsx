@@ -5,8 +5,7 @@ import { Button, Checkbox, Form, Input, Typography, message } from "antd";
 import jwt_decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../Constants";
-import { useAppDispatch } from "../../hooks";
-import "./index.css";
+import { useAppDispatch } from "../../app/hooks";
 const { Title } = Typography;
 
 const Login = () => {

@@ -6,7 +6,7 @@ import "./App.less";
 const { Header } = Layout;
 
 const App = () => (
-  <Layout>
+  <Layout style={{ minHeight: "100vh" }}>
     <Header>
       <Navbar />
     </Header>

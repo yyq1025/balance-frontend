@@ -16,19 +16,20 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import axios, { AxiosError } from "axios";
-import { useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../app/hooks";
 import QueryCreateForm from "./QueryCreateForm";
+import BalanceCard, { Balance } from "./Balance";
 import { BASE_URL } from "../Constants";
 
-interface Balance {
-  id: number;
-  address: string;
-  network: string;
-  token: string;
-  symbol: string;
-  balance: string;
-  tag?: string;
-}
+// interface Balance {
+//   id: number;
+//   address: string;
+//   network: string;
+//   token: string;
+//   symbol: string;
+//   balance: string;
+//   tag?: string;
+// }
 
 type BalancesProps = {
   user: any;
@@ -92,6 +93,32 @@ const Balances = ({ user }: BalancesProps) => {
     }
   };
 
+  const onSync = async (id: number) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/balances/${id}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+        timeout: 5000,
+      });
+      console.log(res);
+      message.success("Query updated successfully");
+      setBalances((prevBalances) => {
+        const index = prevBalances.findIndex((balance) => balance.id === id);
+        const newBalances = [...prevBalances];
+        // not a good design here
+        newBalances[index] = res.data.balances[0];
+        return newBalances;
+      });
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      console.log(err);
+      if (err.response?.data) {
+        message.error(err.response.data.message);
+      } else {
+        message.error(err.message);
+      }
+    }
+  };
+
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
       <Card>
@@ -111,7 +138,7 @@ const Balances = ({ user }: BalancesProps) => {
       <Row gutter={[16, 16]}>
         {balances.map((balance, index) => (
           <Col span={6} key={index}>
-            <Card
+            {/* <Card
               title={
                 <Typography.Title
                   level={5}
@@ -149,7 +176,12 @@ const Balances = ({ user }: BalancesProps) => {
                 }
                 description={balance.network}
               />
-            </Card>
+            </Card> */}
+            <BalanceCard
+              balance={balance}
+              onSync={onSync}
+              onDelete={onDelete}
+            />
           </Col>
         ))}
       </Row>

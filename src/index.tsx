@@ -10,7 +10,7 @@ import Reset from "./components/Reset";
 import Account from "./components/Account";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./store";
+import store from "./app/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -6,7 +6,6 @@ import validator from "validator";
 import axios, { AxiosError } from "axios";
 import { BASE_URL } from "../Constants";
 import { Code } from "../Utils";
-import "./index.css";
 const { Title } = Typography;
 
 const Register = () => {

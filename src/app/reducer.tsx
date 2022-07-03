@@ -6,12 +6,12 @@ const initialState = {
 
 export default function authReducer(
   state = initialState,
-  action: PayloadAction
+  action: PayloadAction<any>
 ) {
   switch (action.type) {
     case "LOGIN":
       console.log(action.payload);
-      localStorage.setItem("profile", JSON.stringify(action.payload));
+      localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
       return {
         ...state,
         authData: action.payload,

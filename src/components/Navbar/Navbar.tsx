@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Row, Button, Space, Avatar, Typography } from "antd";
-import { useAppSelector, useAppDispatch } from "../../hooks";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import jwt_decode, { JwtPayload } from "jwt-decode";
-import "./Navbar.css";
 const { Text } = Typography;
 
 const Navbar = () => {
@@ -29,7 +28,16 @@ const Navbar = () => {
   return (
     <>
       <Row justify="space-between">
-        <Link to="/" className="logo" />
+        <Link
+          to="/"
+          style={{
+            float: "left",
+            width: "120px",
+            height: "31px",
+            margin: "16px 24px 16px 0",
+            background: "rgba(255, 255, 255, 0.3)",
+          }}
+        />
         {user?.email ? (
           <Link to="/account/balances">
             <Space>

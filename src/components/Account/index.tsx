@@ -3,10 +3,9 @@ import { MenuProps } from "antd";
 import { Layout, Menu, Breadcrumb, Input } from "antd";
 import { WalletOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../hooks";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import Balances from "./Balances";
 import Settings from "./Settings";
-import "./index.css";
 const { Sider } = Layout;
 
 const Account = () => {
