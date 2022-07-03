@@ -4,12 +4,13 @@ import { Layout, Menu, Breadcrumb, Input } from "antd";
 import { WalletOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { selectAuthData } from "../../slices/authSlice";
 import Balances from "./Balances";
 import Settings from "./Settings";
 const { Sider } = Layout;
 
 const Account = () => {
-  const user = useAppSelector((state) => state.authData);
+  const user = useAppSelector(selectAuthData);
 
   const navigate = useNavigate();
   const { item } = useParams();
@@ -47,8 +48,8 @@ const Account = () => {
               <Breadcrumb.Item>Account</Breadcrumb.Item>
               <Breadcrumb.Item>{item}</Breadcrumb.Item>
             </Breadcrumb>
-            {item == "balances" && <Balances user={user} />}
-            {item == "settings" && <Settings user={user} />}
+            {item == "balances" && <Balances />}
+            {item == "settings" && <Settings email={user.email} />}
           </Layout>
         </Layout>
       ) : (

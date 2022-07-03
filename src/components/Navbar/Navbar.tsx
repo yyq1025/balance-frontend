@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Row, Button, Space, Avatar, Typography } from "antd";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { logout, selectAuthData } from "../../slices/authSlice";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 const { Text } = Typography;
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const user = useAppSelector((state) => state.authData);
+  const user = useAppSelector(selectAuthData);
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -21,7 +22,7 @@ const Navbar = () => {
       const decodedToken = jwt_decode<JwtPayload>(token);
 
       if (!decodedToken.exp || decodedToken.exp * 1000 < new Date().getTime())
-        dispatch({ type: "LOGOUT" });
+        dispatch(logout());
     }
   }, [location]);
 

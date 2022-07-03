@@ -2,28 +2,21 @@ import React from "react";
 import { Layout, Typography, Row, Col, Card, Avatar, Space } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../Constants";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectNetworks } from "../../slices/networksSlice";
+import { fetchNetworks } from "../../actions/networks";
 const { Header, Footer, Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 
-interface Network {
-  name: string;
-  url: string;
-  symbol: string;
-}
-
 const Home = () => {
-  const [networks, setNetworks] = React.useState<Network[]>([]);
+  const dispatch = useAppDispatch();
+  const networks = useAppSelector(selectNetworks);
 
   React.useEffect(() => {
-    fetch(BASE_URL + "/network", { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => {
-        setNetworks(data.networks || []);
-      });
+    dispatch(fetchNetworks());
   }, []);
 
-  const handleClick = (network: Network) => {
+  const handleClick = (network: any) => {
     console.log(network);
   };
 

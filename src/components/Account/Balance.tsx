@@ -6,24 +6,16 @@ import {
   ExclamationCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-
-export interface Balance {
-  id: number;
-  address: string;
-  network: string;
-  token: string;
-  symbol: string;
-  balance: string;
-  tag?: string;
-}
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { fetchBalance, deleteWallet } from "../../actions/balances";
+import type { Balance } from "../../slices/balancesSlice";
 
 type BalanceProps = {
   balance: Balance;
-  onSync: (id: number) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
 };
 
-const BalanceCard = ({ balance, onSync, onDelete }: BalanceProps) => {
+const BalanceCard = ({ balance }: BalanceProps) => {
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   return (
     <Card
@@ -51,10 +43,9 @@ const BalanceCard = ({ balance, onSync, onDelete }: BalanceProps) => {
           ) : (
             <SyncOutlined
               key="sync"
-              style={{ color: "#1890ff" }}
               onClick={async () => {
                 setLoading(true);
-                await onSync(balance.id);
+                await dispatch(fetchBalance(balance.id));
                 setLoading(false);
               }}
             />
@@ -72,7 +63,7 @@ const BalanceCard = ({ balance, onSync, onDelete }: BalanceProps) => {
               okType: "danger",
               cancelText: "No",
               onOk() {
-                return onDelete(balance.id);
+                return dispatch(deleteWallet(balance.id));
               },
             });
           }}

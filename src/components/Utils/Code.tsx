@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { KeyOutlined } from "@ant-design/icons";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import validator from "validator";
 import axios, { AxiosError } from "axios";
-import { BASE_URL } from "../Constants";
+import { code } from "../../api";
 
 type CodeProps = {
   email: string;
+  label?: string;
+  placeholder?: string;
+  prefix?: ReactNode;
 };
 
-export const Code = ({ email }: CodeProps) => {
+export const Code = ({ email, label, placeholder, prefix }: CodeProps) => {
   const [sending, setSending] = useState(false);
   const [counter, setCounter] = useState(0);
 
@@ -25,30 +27,26 @@ export const Code = ({ email }: CodeProps) => {
     console.log(email);
     setSending(true);
     try {
-      const res = await axios.post(
-        `${BASE_URL}/user/code`,
-        {
-          email: email,
-        },
-        { timeout: 10000 }
-      );
+      const res = await code(email);
       console.log(res);
       message.success(res.data.message);
       setCounter(60);
     } catch (error) {
       console.log(error);
-      const err = error as AxiosError<any>;
-      if (err.response?.data) {
-        message.error(err.response.data.message);
-      } else {
-        message.error(err.message);
+      if (axios.isAxiosError(error)) {
+        const err = error as AxiosError<any>;
+        if (err.response?.data) {
+          message.error(err.response.data.message);
+        } else {
+          message.error(err.message);
+        }
       }
     }
     setSending(false);
   };
 
   return (
-    <Form.Item>
+    <Form.Item label={label}>
       <Input.Group compact>
         <Form.Item
           name="code"
@@ -61,8 +59,8 @@ export const Code = ({ email }: CodeProps) => {
           ]}
         >
           <Input
-            prefix={<KeyOutlined className="site-form-item-icon" />}
-            placeholder="Code"
+            prefix={prefix}
+            placeholder={placeholder}
             style={{ width: "70%" }}
           />
         </Form.Item>
