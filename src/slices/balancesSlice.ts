@@ -18,6 +18,7 @@ export const balanecsSlice = createSlice({
   name: "balanecs",
   initialState: {
     balances: Array<Balance>(),
+    loaded: false,
   },
   reducers: {
     createBalance: (state, action: PayloadAction<Balance>) => {
@@ -25,6 +26,7 @@ export const balanecsSlice = createSlice({
     },
     updateBalances: (state, action: PayloadAction<Balance[]>) => {
       state.balances = action.payload;
+      state.loaded = true;
     },
     updateBalance: (state, action: PayloadAction<Balance>) => {
       const index = state.balances.findIndex(
@@ -43,6 +45,6 @@ export const balanecsSlice = createSlice({
 export const { createBalance, updateBalances, updateBalance, deleteBalances } =
   balanecsSlice.actions;
 
-export const selectBalances = (state: RootState) => state.balances.balances;
+export const selectBalances = (state: RootState) => state.balances;
 
 export default balanecsSlice.reducer;
