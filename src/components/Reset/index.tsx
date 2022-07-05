@@ -3,8 +3,8 @@ import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Typography, message } from "antd";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAuthData } from "../../slices/authSlice";
-import { reset } from "../../actions/auth";
+import { selectAuthData, reset } from "../../slices/authSlice";
+// import { reset } from "../../actions/auth";
 import { Code } from "../Utils";
 const { Title } = Typography;
 
@@ -21,7 +21,7 @@ const Reset = () => {
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    await dispatch(reset(values, navigate));
+    await dispatch(reset({ values, navigate }));
     setSubmitting(false);
   };
 

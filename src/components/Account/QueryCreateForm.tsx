@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Modal, Radio, Select, message } from "antd";
 import axios, { AxiosError } from "axios";
-import { Network } from "../../slices/networksSlice";
+import { useAppSelector } from "../../app/hooks";
+import { selectNetworkNames } from "../../slices/networksSlice";
 
 interface QueryCreateFormProps {
   visible: boolean;
-  networks: Network[];
   onCreate: (values: any) => Promise<void>;
   onCancel: () => void;
 }
 
 const QueryCreateForm = ({
   visible,
-  networks,
   onCreate,
   onCancel,
 }: QueryCreateFormProps) => {
+  const networkNames = useAppSelector(selectNetworkNames);
+
   const [form] = Form.useForm();
   const [submitting, setSubmitting] = React.useState(false);
 
@@ -85,16 +86,12 @@ const QueryCreateForm = ({
                 .includes(input.toLowerCase())
             }
           >
-            {networks.map((network) => (
-              <Select.Option key={network.name} value={network.name}>
-                {network.name}
+            {networkNames.map((networkName) => (
+              <Select.Option key={networkName} value={networkName}>
+                {networkName}
               </Select.Option>
             ))}
           </Select>
-          {/* <Select.Option value="Ethereum">Ethereum</Select.Option>
-            <Select.Option value="BSC">BSC</Select.Option>
-            <Select.Option value="Polygon">Polygon</Select.Option>
-          </Select> */}
         </Form.Item>
         <Form.Item name="token" label="Token">
           <Input placeholder="Leave empty to query native token" />

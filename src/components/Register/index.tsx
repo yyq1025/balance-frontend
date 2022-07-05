@@ -5,8 +5,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import validator from "validator";
 import axios, { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAuthData } from "../../slices/authSlice";
-import { register } from "../../actions/auth";
+import { selectAuthData, register } from "../../slices/authSlice";
+// import { register } from "../../actions/auth";
 import { Code } from "../Utils";
 const { Title } = Typography;
 
@@ -23,7 +23,7 @@ const Register = () => {
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    await dispatch(register(values, navigate));
+    await dispatch(register({ values, navigate }));
     setSubmitting(false);
   };
 

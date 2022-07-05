@@ -1,7 +1,8 @@
 import React from "react";
 import { useAppDispatch } from "../../app/hooks";
-import { logout } from "../../slices/authSlice";
-import { reset } from "../../actions/auth";
+import { reset } from "../../slices/authSlice";
+import { logout } from "../../slices/utils";
+// import { reset } from "../../actions/auth";
 import { Code } from "../Utils";
 import { Layout, Typography, Input, Button, Divider, Form } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ const Settings = ({ email }: SettingsProps) => {
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    await dispatch(reset(values, navigate));
+    await dispatch(reset({ values, navigate }));
     setSubmitting(false);
   };
 

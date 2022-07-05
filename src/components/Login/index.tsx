@@ -2,8 +2,8 @@ import React from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Typography, message } from "antd";
 import { useNavigate, Link, Navigate } from "react-router-dom";
-import { selectAuthData } from "../../slices/authSlice";
-import { login } from "../../actions/auth";
+import { selectAuthData, login } from "../../slices/authSlice";
+// import { login } from "../../actions/auth";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 const { Title } = Typography;
 
@@ -16,7 +16,7 @@ const Login = () => {
   const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
-    await dispatch(login(values, navigate));
+    await dispatch(login({ values, navigate }));
     setSubmitting(false);
   };
 
