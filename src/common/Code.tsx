@@ -1,17 +1,18 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { Button, Form, Input, message } from "antd";
-import validator from "validator";
+import { Button, Form, Input, message, FormItemProps } from "antd";
+import isEmail from "validator/lib/isEmail";
 import axios, { AxiosError } from "axios";
-import { code } from "../../api";
+import isInt from "validator/lib/isInt";
+import { code } from "../api";
+const { Item } = Form;
 
-type CodeProps = {
+interface CodeProps extends FormItemProps {
   email: string;
-  label?: string;
   placeholder?: string;
   prefix?: ReactNode;
-};
+}
 
-export const Code = ({ email, label, placeholder, prefix }: CodeProps) => {
+const Code = ({ email, placeholder, prefix, ...props }: CodeProps) => {
   const [sending, setSending] = useState(false);
   const [counter, setCounter] = useState(0);
 
@@ -46,15 +47,21 @@ export const Code = ({ email, label, placeholder, prefix }: CodeProps) => {
   };
 
   return (
-    <Form.Item label={label}>
+    <Item {...props}>
       <Input.Group compact>
-        <Form.Item
+        <Item
           name="code"
           noStyle
           rules={[
             {
-              required: true,
-              message: "Please input the code you got!",
+              validator: (_, value) => {
+                if (isInt(value, { min: 0, max: 999999 })) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The input is not valid code!")
+                );
+              },
             },
           ]}
         >
@@ -63,19 +70,19 @@ export const Code = ({ email, label, placeholder, prefix }: CodeProps) => {
             placeholder={placeholder}
             style={{ width: "70%" }}
           />
-        </Form.Item>
+        </Item>
         <Button
           style={{ width: "30%" }}
           type="primary"
           onClick={onClick}
           loading={sending}
-          disabled={
-            !email || !validator.isEmail(email) || sending || counter > 0
-          }
+          disabled={!email || !isEmail(email) || sending || counter > 0}
         >
           {counter > 0 ? `${counter}s` : sending ? "Sending" : "Get code"}
         </Button>
       </Input.Group>
-    </Form.Item>
+    </Item>
   );
 };
+
+export default Code;

@@ -1,7 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { message } from "antd";
 import * as api from "../api";
+import { resetWallets } from "../features/balances/balancesSlice";
+import { AppDispatch } from "../app/store";
 import type { NavigateFunction } from "react-router-dom";
 import type { RootState } from "../app/store";
 
@@ -67,7 +69,7 @@ export const reset = createAsyncThunk<void, resetArgs, { rejectValue: string }>(
   async ({ values, navigate }, { rejectWithValue }) => {
     try {
       await api.reset(values);
-      navigate("/login");
+      navigate("/user/login", { replace: true });
     } catch (error) {
       const err = error as AxiosError<any>;
       if (err.response?.data) {
@@ -119,7 +121,12 @@ export const authSlice = createSlice({
   },
 });
 
-export const { signOut } = authSlice.actions;
+const { signOut } = authSlice.actions;
+
+export const logout = () => (dispatch: AppDispatch) => {
+  dispatch(resetWallets());
+  dispatch(signOut());
+};
 
 export const selectAuthData = (state: RootState) => state.auth.authData;
 

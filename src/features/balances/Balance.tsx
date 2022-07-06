@@ -11,17 +11,20 @@ import {
 import { getAddress } from "@ethersproject/address";
 import type { EntityId } from "@reduxjs/toolkit";
 import { AddressZero } from "@ethersproject/constants";
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectBalanceById,
   fetchBalance,
   deleteWallets,
-} from "../../slices/balancesSlice";
-import { selectNetworkByName } from "../../slices/networksSlice";
+} from "./balancesSlice";
+import { selectNetworkByName } from "../networks/networksSlice";
+import EllipsisMiddle from "../../common/EllipsisMiddle";
 const { Title, Text } = Typography;
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
+
+  const [syncing, setSyncing] = useState(false);
 
   const balance = useAppSelector((state) =>
     selectBalanceById(state, balanceId)
@@ -37,39 +40,45 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
     return null;
   }
 
-  const [loading, setLoading] = useState(false);
+  const address = getAddress(balance.address);
+  const token = getAddress(balance.token);
+
   return (
     <Card
       title={
         <a
-          href={`${network.explorer}/address/${balance.address}`}
+          href={`${network.explorer}/address/${address}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Title level={5} underline copyable={!balance.tag} ellipsis={true}>
-            {balance.tag || balance.address}
-          </Title>
+          <EllipsisMiddle copyable={!balance.tag} suffixCount={4}>
+            {balance.tag || address}
+          </EllipsisMiddle>
         </a>
       }
+      extra={<a href="#">More</a>}
       bordered={false}
       actions={[
-        <SyncOutlined
-          key="sync"
-          spin={loading}
-          onClick={async () => {
-            if (!loading) {
-              setLoading(true);
-              await dispatch(fetchBalance(balance.id));
-              setLoading(false);
-            }
-          }}
-        />,
+        <>
+          {syncing ? (
+            <LoadingOutlined />
+          ) : (
+            <SyncOutlined
+              key="sync"
+              onClick={async () => {
+                setSyncing(true);
+                await dispatch(fetchBalance(balance.id));
+                setSyncing(false);
+              }}
+            />
+          )}
+        </>,
         <a
           key="more"
           href={
-            balance.token === AddressZero
-              ? `${network.explorer}/address/${balance.address}`
-              : `${network.explorer}/token/${balance.token}?a=${balance.address}`
+            token === AddressZero
+              ? `${network.explorer}/address/${address}`
+              : `${network.explorer}/token/${token}?a=${address}`
           }
           target="_blank"
           rel="noopener noreferrer"
@@ -95,16 +104,14 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
         />,
       ]}
     >
-      <Spin spinning={loading}>
+      <Spin spinning={syncing}>
         <Card.Meta
           avatar={
             <Avatar
               src={
                 balance.token === AddressZero
                   ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network.toLowerCase()}/info/logo.png`
-                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network.toLowerCase()}/assets/${getAddress(
-                      balance.token
-                    )}/logo.png`
+                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network.toLowerCase()}/assets/${token}/logo.png`
               }
               icon={<QuestionOutlined />}
             />

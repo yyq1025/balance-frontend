@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { UserOutlined, HomeOutlined } from "@ant-design/icons";
 import { Row, Button, Space, Avatar, Typography } from "antd";
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { selectAuthData } from "../../slices/authSlice";
-import { logout } from "../../slices/utils";
+import { useAppSelector, useAppDispatch } from "../common/hooks";
+import { selectAuthData } from "../common/authSlice";
+import { logout } from "../common/authSlice";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 const { Text } = Typography;
@@ -33,16 +33,8 @@ const Navbar = () => {
         <HomeOutlined style={{ fontSize: "20px", color: "white" }} />
       </Link>
       {user?.email ? (
-        <Link to="/account/balances">
+        <Link to="/account/wallets">
           <Space>
-            {/* <Avatar
-              icon={<UserOutlined />}
-              style={{
-                color: "white",
-                backgroundColor: "transparent",
-                border: "1.5px solid",
-              }}
-            /> */}
             <UserOutlined style={{ fontSize: "20px", color: "white" }} />
             <Text style={{ color: "white" }}>{user.email}</Text>
           </Space>
@@ -53,7 +45,7 @@ const Navbar = () => {
             type="primary"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/register");
+              navigate("/user/register", { replace: true });
             }}
           >
             Sign up
@@ -63,7 +55,7 @@ const Navbar = () => {
             style={{ color: "white" }}
             onClick={(e) => {
               e.preventDefault();
-              navigate("/login");
+              navigate("/user/login", { replace: true });
             }}
           >
             Sign in

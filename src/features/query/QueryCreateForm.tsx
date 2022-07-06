@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Modal, Radio, Select, message } from "antd";
 import axios, { AxiosError } from "axios";
-import { useAppSelector } from "../../app/hooks";
-import { selectNetworkNames } from "../../slices/networksSlice";
+import { useAppSelector, useAppDispatch } from "../../common/hooks";
+import {
+  selectNetworkNames,
+  selectNetworksLoaded,
+  fetchNetworks,
+} from "../networks/networksSlice";
 
 interface QueryCreateFormProps {
   visible: boolean;
@@ -15,10 +19,18 @@ const QueryCreateForm = ({
   onCreate,
   onCancel,
 }: QueryCreateFormProps) => {
+  const dispatch = useAppDispatch();
+  const networksLoaded = useAppSelector(selectNetworksLoaded);
   const networkNames = useAppSelector(selectNetworkNames);
 
   const [form] = Form.useForm();
-  const [submitting, setSubmitting] = React.useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!networksLoaded) {
+      dispatch(fetchNetworks());
+    }
+  }, []);
 
   return (
     <Modal

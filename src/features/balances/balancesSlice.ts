@@ -6,8 +6,8 @@ import {
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { message } from "antd";
-import * as api from "../api";
-import type { RootState } from "../app/store";
+import * as api from "../../api";
+import type { RootState } from "../../app/store";
 
 interface Wallet {
   id: number;
@@ -17,7 +17,7 @@ interface Wallet {
   tag?: string;
 }
 
-export interface Balance extends Wallet {
+interface Balance extends Wallet {
   symbol: string;
   balance: string;
 }

@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Avatar, Space, message, Col, Typography } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
-import { useAppSelector } from "../../app/hooks";
-import { selectNetworkByName } from "../../slices/networksSlice";
+import { useAppSelector } from "../../common/hooks";
+import { selectNetworkByName } from "../networks/networksSlice";
 const { Title, Text } = Typography;
 
 const Network = ({ networkName }: { networkName: EntityId }) => {

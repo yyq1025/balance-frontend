@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../slices/authSlice";
-import balancesReducer from "../slices/balancesSlice";
-import networksReducer from "../slices/networksSlice";
+import authReducer from "../common/authSlice";
+import balancesReducer from "../features/balances/balancesSlice";
+import networksReducer from "../features/networks/networksSlice";
 
 const store = configureStore({
   reducer: {
