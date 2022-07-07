@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Card, Modal, Typography, Spin, Avatar, Image } from "antd";
+import { Card, Modal, Spin, Avatar } from "antd";
 import {
   SyncOutlined,
-  EllipsisOutlined,
   DeleteOutlined,
   ExclamationCircleOutlined,
   LoadingOutlined,
@@ -19,7 +18,6 @@ import {
 } from "./balancesSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
 import EllipsisMiddle from "../../common/EllipsisMiddle";
-const { Title, Text } = Typography;
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
@@ -56,7 +54,19 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           </EllipsisMiddle>
         </a>
       }
-      extra={<a href="#">More</a>}
+      extra={
+        <a
+          href={
+            token === AddressZero
+              ? `${network.explorer}/address/${address}`
+              : `${network.explorer}/token/${token}?a=${address}`
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          More
+        </a>
+      }
       bordered={false}
       actions={[
         <>
@@ -73,18 +83,6 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             />
           )}
         </>,
-        <a
-          key="more"
-          href={
-            token === AddressZero
-              ? `${network.explorer}/address/${address}`
-              : `${network.explorer}/token/${token}?a=${address}`
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <EllipsisOutlined style={{ fontSize: "16px" }} />
-        </a>,
         <DeleteOutlined
           key="delete"
           style={{ color: "red" }}
