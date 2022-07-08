@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Modal, Radio, Select, message } from "antd";
+import { Form, Input, Modal, Select, message } from "antd";
 import axios, { AxiosError } from "axios";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -7,10 +7,12 @@ import {
   selectNetworksLoaded,
   fetchNetworks,
 } from "../networks/networksSlice";
+import { isAddress } from "@ethersproject/address";
+import type { ErrorResponse, QueryForm } from "../../common/types";
 
 interface QueryCreateFormProps {
   visible: boolean;
-  onCreate: (values: any) => Promise<void>;
+  onCreate: (values: QueryForm) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -23,7 +25,7 @@ const QueryCreateForm = ({
   const networksLoaded = useAppSelector(selectNetworksLoaded);
   const networkNames = useAppSelector(selectNetworkNames);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<QueryForm>();
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const QueryCreateForm = ({
         } catch (error) {
           console.log(error);
           if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<any>;
+            const axiosError = error as AxiosError<ErrorResponse>;
             if (axiosError.response?.data) {
               message.error(axiosError.response.data.message);
             } else {
@@ -72,7 +74,17 @@ const QueryCreateForm = ({
           rules={[
             {
               required: true,
-              message: "Please input the address for query!",
+              message: "Please enter an address",
+            },
+            {
+              validator: (_, value) => {
+                if (value && !isAddress(value)) {
+                  return Promise.reject(
+                    new Error("The input is not valid address!")
+                  );
+                }
+                return Promise.resolve();
+              },
             },
           ]}
         >
@@ -93,7 +105,7 @@ const QueryCreateForm = ({
             placeholder="Select a network"
             optionFilterProp="children"
             filterOption={(input, option) =>
-              (option!.children as unknown as string)
+              (option?.children as unknown as string)
                 .toLowerCase()
                 .includes(input.toLowerCase())
             }
@@ -105,7 +117,22 @@ const QueryCreateForm = ({
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="token" label="Token">
+        <Form.Item
+          name="token"
+          label="Token"
+          rules={[
+            {
+              validator: (_, value) => {
+                if (value && !isAddress(value)) {
+                  return Promise.reject(
+                    new Error("The input is not valid address!")
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
           <Input placeholder="Leave empty to query native token" />
         </Form.Item>
         <Form.Item name="tag" label="Tag">

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Typography, message } from "antd";
-import { useNavigate, Link, Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { selectAuthData, reset } from "../../common/authSlice";
+import { Button, Form, Typography } from "antd";
+import { useNavigate, Link } from "react-router-dom";
+import { useAppDispatch } from "../../common/hooks";
+import { reset } from "../../common/authSlice";
 import Email from "../../common/Email";
 import Code from "../../common/Code";
 import Password from "../../common/Password";
+import type { ResetForm } from "../../common/types";
 const { Item } = Form;
 const { Title } = Typography;
 
@@ -15,11 +16,11 @@ const Reset = () => {
 
   const navigate = useNavigate();
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<ResetForm>();
   const email = Form.useWatch("email", form);
   const [submitting, setSubmitting] = useState(false);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: ResetForm) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
     await dispatch(reset({ values, navigate }));

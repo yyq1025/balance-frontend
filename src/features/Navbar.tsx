@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { UserOutlined, HomeOutlined } from "@ant-design/icons";
-import { Row, Button, Space, Avatar, Typography } from "antd";
+import { Row, Button, Space, Typography } from "antd";
 import { useAppSelector, useAppDispatch } from "../common/hooks";
 import { selectAuthData } from "../common/authSlice";
 import { logout } from "../common/authSlice";

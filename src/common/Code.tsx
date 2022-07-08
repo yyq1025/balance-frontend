@@ -4,6 +4,7 @@ import isEmail from "validator/lib/isEmail";
 import axios, { AxiosError } from "axios";
 import isInt from "validator/lib/isInt";
 import { code } from "../api";
+import type { ErrorResponse } from "./types";
 const { Item } = Form;
 
 interface CodeProps extends FormItemProps {
@@ -35,7 +36,7 @@ const Code = ({ email, placeholder, prefix, ...props }: CodeProps) => {
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
-        const err = error as AxiosError<any>;
+        const err = error as AxiosError<ErrorResponse>;
         if (err.response?.data) {
           message.error(err.response.data.message);
         } else {

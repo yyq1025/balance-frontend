@@ -1,10 +1,23 @@
 import React from "react";
-import { Card, Avatar, Space, message, Col, Typography } from "antd";
+import { Card, Avatar, Space, message, Typography } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../common/hooks";
-import { selectNetworkByName } from "../networks/networksSlice";
+import { selectNetworkByName } from "./networksSlice";
+import { MetaMaskInpageProvider } from "@metamask/providers";
 const { Title, Text } = Typography;
+
+declare global {
+  interface Window {
+    ethereum?: MetaMaskInpageProvider;
+  }
+}
+
+interface ProviderRpcError extends Error {
+  message: string;
+  code: number;
+  data?: unknown;
+}
 
 const Network = ({ networkName }: { networkName: EntityId }) => {
   const network = useAppSelector((state) =>
@@ -15,10 +28,12 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
     return null;
   }
 
+  const { ethereum } = window;
+
   const handleAdd = async () => {
-    if ((window as any).ethereum) {
+    if (ethereum) {
       try {
-        await (window as any).ethereum.request({
+        await ethereum.request({
           method: "wallet_addEthereumChain",
           params: [
             {
@@ -34,20 +49,20 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
           ],
         });
       } catch (e) {
-        message.error((e as any)?.message);
+        message.error((e as ProviderRpcError).message);
       }
     }
   };
 
   const handleSet = async () => {
-    if ((window as any).ethereum) {
+    if (ethereum) {
       try {
-        await (window as any).ethereum.request({
+        await ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: network.chainId }],
         });
       } catch (e) {
-        message.error((e as any)?.message);
+        message.error((e as ProviderRpcError).message);
       }
     }
   };

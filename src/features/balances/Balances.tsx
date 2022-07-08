@@ -1,31 +1,28 @@
 import React, { useEffect } from "react";
-import { Row, Col } from "antd";
+import { Row, Col, RowProps } from "antd";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectBalancesLoaded,
   selectBalanceIds,
   fetchBalances,
 } from "./balancesSlice";
+import { selectAuthData } from "../../common/authSlice";
 import Balance from "./Balance";
 
-interface BalancesProps {
-  style?: React.CSSProperties;
-  className?: string;
-}
-
-const Balances = ({ style, className }: BalancesProps) => {
+const Balances = ({ ...props }: RowProps) => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectAuthData);
   const balanceIds = useAppSelector(selectBalanceIds);
-  const balancesLoaded = useAppSelector(selectBalancesLoaded);
+  const loaded = useAppSelector(selectBalancesLoaded);
 
   useEffect(() => {
-    if (!balancesLoaded) {
-      dispatch(fetchBalances());
+    if (!loaded) {
+      dispatch(fetchBalances(user?.token));
     }
   }, []);
 
   return (
-    <Row gutter={[16, 16]} style={style} className={className}>
+    <Row {...props} gutter={[16, 16]}>
       {balanceIds.map((balanceId) => (
         <Col span={6} key={balanceId}>
           <Balance balanceId={balanceId} />

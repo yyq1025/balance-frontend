@@ -7,6 +7,7 @@ import { message } from "antd";
 import { AxiosError } from "axios";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
+import type { ErrorResponse } from "../../common/types";
 
 interface Network {
   chainId: string;
@@ -35,7 +36,7 @@ export const fetchNetworks = createAsyncThunk<
     const response = await api.fetchNetworks();
     return response.data.networks;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {

@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography, message, Card } from "antd";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { Button, Checkbox, Form, Typography } from "antd";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../common/authSlice";
-import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { useAppDispatch } from "../../common/hooks";
 import Email from "../../common/Email";
 import Password from "../../common/Password";
+import type { LoginForm } from "../../common/types";
 const { Item } = Form;
 const { Title } = Typography;
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [submitting, setSubmitting] = React.useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: LoginForm) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
     await dispatch(login({ values, navigate }));

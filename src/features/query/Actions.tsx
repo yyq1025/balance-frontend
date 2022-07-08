@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Card, Button } from "antd";
+import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../common/hooks";
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { selectAuthData } from "../../common/authSlice";
 import { addBalance } from "../balances/balancesSlice";
 import QueryCreateForm from "./QueryCreateForm";
+import type { QueryForm } from "../../common/types";
 
 const Actions = () => {
   const dispatch = useAppDispatch();
-
+  const user = useAppSelector(selectAuthData);
   const [visible, setVisible] = useState(false);
 
-  const onCreate = async (values: any) => {
-    await dispatch(addBalance(values));
+  const onCreate = async (values: QueryForm) => {
+    await dispatch(addBalance({ token: user.token, values }));
     setVisible(false);
   };
 

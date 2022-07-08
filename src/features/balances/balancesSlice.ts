@@ -2,12 +2,12 @@ import {
   createEntityAdapter,
   createAsyncThunk,
   createSlice,
-  PayloadAction,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { message } from "antd";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
+import type { ErrorResponse, QueryForm } from "../../common/types";
 
 interface Wallet {
   id: number;
@@ -22,6 +22,11 @@ interface Balance extends Wallet {
   balance: string;
 }
 
+// interface BalanceArgs {
+//   token: string;
+//   id: number;
+// }
+
 export const balancesAdapter = createEntityAdapter<Balance>({
   sortComparer: (a, b) => a.id - b.id,
 });
@@ -32,14 +37,14 @@ const initialState = balancesAdapter.getInitialState({
 
 export const fetchBalances = createAsyncThunk<
   Balance[],
-  void,
+  string,
   { rejectValue: string }
->("balances/fetchBalances", async (_, { rejectWithValue }) => {
+>("balances/fetchBalances", async (token, { rejectWithValue }) => {
   try {
-    const response = await api.fetchBalances();
+    const response = await api.fetchBalances(token);
     return response.data.balances;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {
@@ -50,14 +55,14 @@ export const fetchBalances = createAsyncThunk<
 
 export const addBalance = createAsyncThunk<
   Balance,
-  any,
+  { token: string; values: QueryForm },
   { rejectValue: string }
->("balances/addBalance", async (values, { rejectWithValue }) => {
+>("balances/addBalance", async ({ token, values }, { rejectWithValue }) => {
   try {
-    const response = await api.createWallet(values);
+    const response = await api.createWallet(token, values);
     return response.data.balance;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {
@@ -68,14 +73,14 @@ export const addBalance = createAsyncThunk<
 
 export const fetchBalance = createAsyncThunk<
   Balance,
-  number,
+  { token: string; id: number },
   { rejectValue: string }
->("balances/fetchBalance", async (id, { rejectWithValue }) => {
+>("balances/fetchBalance", async ({ token, id }, { rejectWithValue }) => {
   try {
-    const response = await api.fetchBalance(id);
+    const response = await api.fetchBalance(token, id);
     return response.data.balance;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {
@@ -86,14 +91,14 @@ export const fetchBalance = createAsyncThunk<
 
 export const deleteWallets = createAsyncThunk<
   number[],
-  number,
+  { token: string; id: number },
   { rejectValue: string }
->("balances/deleteBalances", async (id, { rejectWithValue }) => {
+>("balances/deleteBalances", async ({ token, id }, { rejectWithValue }) => {
   try {
-    const response = await api.deleteWallet(id);
+    const response = await api.deleteWallet(token, id);
     return response.data.ids;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {

@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { LockOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Typography, message } from "antd";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { selectAuthData, register } from "../../common/authSlice";
+import { Button, Checkbox, Form, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../common/hooks";
+import { register } from "../../common/authSlice";
 import Email from "../../common/Email";
 import Code from "../../common/Code";
 import Password from "../../common/Password";
+import type { RegisterForm } from "../../common/types";
 const { Item } = Form;
 const { Title } = Typography;
 
@@ -15,11 +16,11 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<RegisterForm>();
   const email = Form.useWatch("email", form);
-  const [submitting, setSubmitting] = React.useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: RegisterForm) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
     await dispatch(register({ values, navigate }));
@@ -53,7 +54,6 @@ const Register = () => {
           prefix={<LockOutlined className="site-form-item-icon" />}
         />
         <Item
-          name="agreement"
           valuePropName="checked"
           rules={[
             {

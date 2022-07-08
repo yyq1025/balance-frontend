@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { reset, logout, selectAuthData } from "../../common/authSlice";
 import Code from "../../common/Code";
 import Password from "../../common/Password";
 import { Layout, Typography, Input, Button, Divider, Form } from "antd";
 import { useNavigate } from "react-router-dom";
+import type { ResetForm } from "../../common/types";
 const { Content } = Layout;
 
 const Settings = () => {
@@ -14,9 +15,9 @@ const Settings = () => {
 
   const user = useAppSelector(selectAuthData);
 
-  const [submitting, setSubmitting] = React.useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: ResetForm) => {
     console.log("Received values of form: ", values);
     setSubmitting(true);
     await dispatch(reset({ values, navigate }));

@@ -16,12 +16,13 @@ import {
   fetchBalance,
   deleteWallets,
 } from "./balancesSlice";
+import { selectAuthData } from "../../common/authSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
 import EllipsisMiddle from "../../common/EllipsisMiddle";
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
-
+  const user = useAppSelector(selectAuthData);
   const [syncing, setSyncing] = useState(false);
 
   const balance = useAppSelector((state) =>
@@ -77,7 +78,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               key="sync"
               onClick={async () => {
                 setSyncing(true);
-                await dispatch(fetchBalance(balance.id));
+                await dispatch(
+                  fetchBalance({ token: user?.token, id: balance.id })
+                );
                 setSyncing(false);
               }}
             />
@@ -95,7 +98,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               okType: "danger",
               cancelText: "No",
               onOk() {
-                return dispatch(deleteWallets(balance.id));
+                return dispatch(
+                  deleteWallets({ token: user?.token, id: balance.id })
+                );
               },
             });
           }}

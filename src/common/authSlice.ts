@@ -6,6 +6,12 @@ import { resetWallets } from "../features/balances/balancesSlice";
 import { AppDispatch } from "../app/store";
 import type { NavigateFunction } from "react-router-dom";
 import type { RootState } from "../app/store";
+import type {
+  ErrorResponse,
+  LoginForm,
+  RegisterForm,
+  ResetForm,
+} from "../common/types";
 
 interface Auth {
   email: string;
@@ -13,7 +19,7 @@ interface Auth {
 }
 
 interface LoginArgs {
-  values: any;
+  values: LoginForm;
   navigate: NavigateFunction;
 }
 
@@ -25,7 +31,7 @@ export const login = createAsyncThunk<Auth, LoginArgs, { rejectValue: string }>(
       navigate("/account/balances", { replace: true });
       return response.data;
     } catch (error) {
-      const err = error as AxiosError<any>;
+      const err = error as AxiosError<ErrorResponse>;
       if (err.response?.data) {
         return rejectWithValue(err.response.data.message);
       } else {
@@ -36,7 +42,7 @@ export const login = createAsyncThunk<Auth, LoginArgs, { rejectValue: string }>(
 );
 
 interface RegisterArgs {
-  values: any;
+  values: RegisterForm;
   navigate: NavigateFunction;
 }
 
@@ -50,7 +56,7 @@ export const register = createAsyncThunk<
     navigate("/account/balances", { replace: true });
     return response.data;
   } catch (error) {
-    const err = error as AxiosError<any>;
+    const err = error as AxiosError<ErrorResponse>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data.message);
     } else {
@@ -60,7 +66,7 @@ export const register = createAsyncThunk<
 });
 
 interface resetArgs {
-  values: any;
+  values: ResetForm;
   navigate: NavigateFunction;
 }
 
@@ -71,7 +77,7 @@ export const reset = createAsyncThunk<void, resetArgs, { rejectValue: string }>(
       await api.reset(values);
       navigate("/user/login", { replace: true });
     } catch (error) {
-      const err = error as AxiosError<any>;
+      const err = error as AxiosError<ErrorResponse>;
       if (err.response?.data) {
         return rejectWithValue(err.response.data.message);
       } else {
