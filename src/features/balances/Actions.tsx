@@ -35,7 +35,7 @@ const Actions = () => {
           />
         </>
       ) : (
-        "Verify your email to add a query"
+        "Verify your email to add queries"
       )}
     </>
   );
