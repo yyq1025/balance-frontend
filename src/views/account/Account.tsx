@@ -2,12 +2,11 @@ import React from "react";
 import { Outlet, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Layout, Menu, MenuProps, Breadcrumb } from "antd";
 import { WalletOutlined, SettingOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../../common/hooks";
-import { selectAuthData } from "../../common/authSlice";
+import { useAuth0 } from "@auth0/auth0-react";
 const { Sider } = Layout;
 
 const Account = () => {
-  const user = useAppSelector(selectAuthData);
+  const { isAuthenticated } = useAuth0();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +18,7 @@ const Account = () => {
 
   return (
     <>
-      {user ? (
+      {isAuthenticated ? (
         <Layout hasSider>
           <Sider
             theme="light"
@@ -67,7 +66,7 @@ const Account = () => {
           </Layout>
         </Layout>
       ) : (
-        <Navigate to="/user/login" />
+        <Navigate to="/" />
       )}
     </>
   );

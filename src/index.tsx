@@ -1,13 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
 import App from "./App";
 import Home from "./views/home/Home";
-import User from "./views/user/User";
-import Login from "./views/user/Login";
-import Register from "./views/user/Register";
-import Reset from "./views/user/Reset";
 import Account from "./views/account/Account";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
@@ -20,24 +17,26 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
-            <Route path="user" element={<User />}>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="reset" element={<Reset />} />
+    <Auth0Provider
+      domain={process.env.REACT_APP_AUTH0_DOMAIN || ""}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID || ""}
+      redirectUri={window.location.origin}
+      audience={process.env.REACT_APP_AUTH0_AUDIENCE || ""}
+    >
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<Home />} />
+              <Route path="account" element={<Account />}>
+                <Route path="wallets" element={<Wallets />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
             </Route>
-            <Route path="account" element={<Account />}>
-              <Route path="wallets" element={<Wallets />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </Auth0Provider>
   </React.StrictMode>
 );
 

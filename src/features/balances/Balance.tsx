@@ -10,19 +10,20 @@ import {
 import { getAddress } from "@ethersproject/address";
 import type { EntityId } from "@reduxjs/toolkit";
 import { AddressZero } from "@ethersproject/constants";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectBalanceById,
   fetchBalance,
   deleteWallets,
 } from "./balancesSlice";
-import { selectAuthData } from "../../common/authSlice";
+// import { selectAuthData } from "../../common/authSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
 import EllipsisMiddle from "../../common/EllipsisMiddle";
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthData);
+  const { getAccessTokenSilently } = useAuth0();
   const [syncing, setSyncing] = useState(false);
 
   const balance = useAppSelector((state) =>
@@ -79,7 +80,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               onClick={async () => {
                 setSyncing(true);
                 await dispatch(
-                  fetchBalance({ token: user?.token, id: balance.id })
+                  fetchBalance({ getAccessTokenSilently, id: balance.id })
                 );
                 setSyncing(false);
               }}
@@ -99,7 +100,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               cancelText: "No",
               onOk() {
                 return dispatch(
-                  deleteWallets({ token: user?.token, id: balance.id })
+                  deleteWallets({ getAccessTokenSilently, id: balance.id })
                 );
               },
             });
