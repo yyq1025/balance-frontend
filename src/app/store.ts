@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../common/authSlice";
 import balancesReducer from "../features/balances/balancesSlice";
 import networksReducer from "../features/networks/networksSlice";
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
     balances: balancesReducer,
     networks: networksReducer,
   },

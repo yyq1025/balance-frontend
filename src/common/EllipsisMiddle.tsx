@@ -1,6 +1,6 @@
+import React from "react";
 import { Typography } from "antd";
 import { TextProps } from "antd/lib/typography/Text";
-import React from "react";
 
 const { Text } = Typography;
 

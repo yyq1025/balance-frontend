@@ -1,23 +1,24 @@
 import React, { useEffect } from "react";
 import { Row, Col, RowProps } from "antd";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectBalancesLoaded,
   selectBalanceIds,
   fetchBalances,
 } from "./balancesSlice";
-import { selectAuthData } from "../../common/authSlice";
+// import { selectAuthData } from "../../common/authSlice";
 import Balance from "./Balance";
 
 const Balances = ({ ...props }: RowProps) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectAuthData);
+  const { getAccessTokenSilently } = useAuth0();
   const balanceIds = useAppSelector(selectBalanceIds);
   const loaded = useAppSelector(selectBalancesLoaded);
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(fetchBalances(user?.token));
+      dispatch(fetchBalances({ getAccessTokenSilently }));
     }
   }, []);
 

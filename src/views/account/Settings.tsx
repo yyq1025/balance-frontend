@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { reset, logout, selectAuthData } from "../../common/authSlice";
-import Code from "../../common/Code";
-import Password from "../../common/Password";
+// import { reset, logout, selectAuthData } from "../../common/authSlice";
+// import Code from "../../common/Code";
+// import Password from "../../common/Password";
 import { Layout, Typography, Input, Button, Divider, Form } from "antd";
 import { useNavigate } from "react-router-dom";
-import type { ResetForm } from "../../common/types";
+import { useAuth0 } from "@auth0/auth0-react";
+// import type { ResetForm } from "../../common/types";
 const { Content } = Layout;
 
 const Settings = () => {
   const dispatch = useAppDispatch();
-
+  const { logout } = useAuth0();
+  const logoutWithRedirect = () => {
+    logout({
+      returnTo: window.location.origin,
+    });
+  };
   const navigate = useNavigate();
 
-  const user = useAppSelector(selectAuthData);
+  // const user = useAppSelector(selectAuthData);
 
-  const [submitting, setSubmitting] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
 
-  const onFinish = async (values: ResetForm) => {
-    console.log("Received values of form: ", values);
-    setSubmitting(true);
-    await dispatch(reset({ values, navigate }));
-    setSubmitting(false);
-  };
+  // const onFinish = async (values: ResetForm) => {
+  //   console.log("Received values of form: ", values);
+  //   setSubmitting(true);
+  //   await dispatch(reset({ values, navigate }));
+  //   setSubmitting(false);
+  // };
 
   return (
     <Content
@@ -33,7 +39,7 @@ const Settings = () => {
         backgroundColor: "#fff",
       }}
     >
-      <Divider orientation="left" orientationMargin="0">
+      {/* <Divider orientation="left" orientationMargin="0">
         <Typography.Title level={4}>Reset Password</Typography.Title>
       </Divider>
       <Form
@@ -53,11 +59,11 @@ const Settings = () => {
             Reset password
           </Button>
         </Form.Item>
-      </Form>
+      </Form> */}
       <Divider orientation="left" orientationMargin="0">
         <Typography.Title level={4}>Logout</Typography.Title>
       </Divider>
-      <Button type="primary" danger onClick={() => dispatch(logout())}>
+      <Button type="primary" danger onClick={() => logoutWithRedirect()}>
         Logout
       </Button>
     </Content>

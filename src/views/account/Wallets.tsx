@@ -1,6 +1,6 @@
 import React from "react";
 import { Space, Card } from "antd";
-import Actions from "../../features/query/Actions";
+import Actions from "../../features/balances/Actions";
 import Balances from "../../features/balances/Balances";
 
 const Wallets = () => (
