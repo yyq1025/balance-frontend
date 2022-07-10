@@ -7,7 +7,6 @@ import {
   selectBalanceIds,
   fetchBalances,
 } from "./balancesSlice";
-// import { selectAuthData } from "../../common/authSlice";
 import Balance from "./Balance";
 
 const Balances = ({ ...props }: RowProps) => {
