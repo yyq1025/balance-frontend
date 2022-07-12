@@ -4,13 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
 import App from "./App";
-import Home from "./views/home/Home";
-import Account from "./views/account/Account";
+import Networks from "./views/Networks";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./app/store";
-import Wallets from "./views/account/Wallets";
-import Settings from "./views/account/Settings";
+import Wallets from "./views/Wallets";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -27,11 +25,27 @@ root.render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />}>
-              <Route index element={<Home />} />
-              <Route path="account" element={<Account />}>
-                <Route path="wallets" element={<Wallets />} />
-                <Route path="settings" element={<Settings />} />
-              </Route>
+              <Route
+                index
+                element={
+                  <Networks
+                    style={{
+                      maxWidth: "900px",
+                    }}
+                  />
+                }
+              />
+              <Route
+                path="wallets"
+                element={
+                  <Wallets
+                    style={{
+                      maxWidth: "900px",
+                      width: "100%",
+                    }}
+                  />
+                }
+              />
             </Route>
           </Routes>
         </BrowserRouter>

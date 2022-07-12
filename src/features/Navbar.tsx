@@ -1,29 +1,59 @@
 import React from "react";
-import { HomeOutlined } from "@ant-design/icons";
-import { Row, Button, Space, Typography, Avatar } from "antd";
+import { Row, Button, Typography, RowProps, Dropdown, Menu } from "antd";
+import { LoginOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Link } from "react-router-dom";
 const { Text } = Typography;
 
-const Navbar = () => {
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+interface NavbarProps extends RowProps {
+  title: string;
+}
+
+const Navbar = ({ title, ...props }: NavbarProps) => {
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const logoutWithRedirect = () => {
+    logout({
+      returnTo: window.location.origin,
+    });
+  };
 
   return (
-    <Row justify="space-between" align="middle">
-      <Link to="/">
-        <HomeOutlined style={{ fontSize: "20px", color: "white" }} />
-      </Link>
+    <Row {...props} justify="space-between" align="middle">
+      <Text
+        style={{
+          fontSize: "24px",
+          fontWeight: 600,
+          textTransform: "capitalize",
+        }}
+      >
+        {title}
+      </Text>
       {isAuthenticated ? (
-        <Link to="/account/wallets">
-          <Space>
-            <Avatar src={user?.picture} />
-            {/* <UserOutlined style={{ fontSize: "20px", color: "white" }} /> */}
-            <Text style={{ color: "white" }}>{user?.email}</Text>
-          </Space>
-        </Link>
+        <Dropdown
+          overlay={
+            <Menu
+              items={[
+                {
+                  key: "logout",
+                  icon: <LogoutOutlined />,
+                  label: "Logout",
+                  onClick: logoutWithRedirect,
+                },
+              ]}
+            />
+          }
+          trigger={["click"]}
+        >
+          <Button type="text" icon={<UserOutlined />}>
+            {user?.email}
+          </Button>
+        </Dropdown>
       ) : (
-        <Button type="primary" onClick={() => loginWithRedirect()}>
-          Log in
+        <Button
+          type="primary"
+          icon={<LoginOutlined />}
+          onClick={loginWithRedirect}
+        >
+          Login
         </Button>
       )}
     </Row>

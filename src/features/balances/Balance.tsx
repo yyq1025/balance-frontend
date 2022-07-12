@@ -17,7 +17,6 @@ import {
   fetchBalance,
   deleteWallets,
 } from "./balancesSlice";
-// import { selectAuthData } from "../../common/authSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
 import EllipsisMiddle from "../../common/EllipsisMiddle";
 

@@ -24,7 +24,7 @@ const Balances = ({ ...props }: RowProps) => {
   return (
     <Row {...props} gutter={[16, 16]}>
       {balanceIds.map((balanceId) => (
-        <Col span={6} key={balanceId}>
+        <Col span={8} key={balanceId}>
           <Balance balanceId={balanceId} />
         </Col>
       ))}
