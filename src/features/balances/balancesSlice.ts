@@ -4,7 +4,6 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { message } from "antd";
 import { Auth0ContextInterface } from "@auth0/auth0-react";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
@@ -131,29 +130,14 @@ export const balanecsSlice = createSlice({
         balancesAdapter.setAll(state, action.payload);
         state.loaded = true;
       })
-      .addCase(fetchBalances.rejected, (_, action) => {
-        message.error(action.payload);
-      })
       .addCase(addBalance.fulfilled, (state, action) => {
         balancesAdapter.addOne(state, action.payload);
-        message.success("Query added");
-      })
-      .addCase(addBalance.rejected, (_, action) => {
-        message.error(action.payload);
       })
       .addCase(fetchBalance.fulfilled, (state, action) => {
         balancesAdapter.upsertOne(state, action.payload);
-        message.success("Query updated");
-      })
-      .addCase(fetchBalance.rejected, (_, action) => {
-        message.error(action.payload);
       })
       .addCase(deleteWallets.fulfilled, (state, action) => {
         balancesAdapter.removeMany(state, action.payload);
-        message.success("Query deleted");
-      })
-      .addCase(deleteWallets.rejected, (_, action) => {
-        message.error(action.payload);
       });
   },
 });

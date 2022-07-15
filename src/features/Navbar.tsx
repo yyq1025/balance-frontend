@@ -49,7 +49,7 @@ const Navbar = ({ title, ...props }: NavbarProps) => {
         </Dropdown>
       ) : (
         <Button
-          type="primary"
+          // type="primary"
           icon={<LoginOutlined />}
           onClick={loginWithRedirect}
         >

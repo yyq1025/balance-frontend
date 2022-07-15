@@ -30,7 +30,9 @@ const QueryCreateForm = ({
 
   useEffect(() => {
     if (!networksLoaded) {
-      dispatch(fetchNetworks());
+      dispatch(fetchNetworks())
+        .unwrap()
+        .catch((error: string) => message.error(error));
     }
   }, []);
 
@@ -49,15 +51,7 @@ const QueryCreateForm = ({
           await onCreate(values);
           form.resetFields();
         } catch (error) {
-          console.log(error);
-          if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<ErrorResponse>;
-            if (axiosError.response?.data) {
-              message.error(axiosError.response.data.message);
-            } else {
-              message.error(axiosError.message);
-            }
-          }
+          console.error(error);
         }
         setSubmitting(false);
       }}
@@ -88,7 +82,7 @@ const QueryCreateForm = ({
             },
           ]}
         >
-          <Input />
+          <Input allowClear />
         </Form.Item>
         <Form.Item
           name="network"
@@ -133,10 +127,10 @@ const QueryCreateForm = ({
             },
           ]}
         >
-          <Input placeholder="Leave empty to query native token" />
+          <Input allowClear placeholder="Leave empty to query native token" />
         </Form.Item>
         <Form.Item name="tag" label="Tag">
-          <Input />
+          <Input allowClear />
         </Form.Item>
       </Form>
     </Modal>

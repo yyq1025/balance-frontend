@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Row, Col, RowProps } from "antd";
+import { Row, Col, RowProps, message } from "antd";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -8,6 +8,7 @@ import {
   fetchBalances,
 } from "./balancesSlice";
 import Balance from "./Balance";
+import { error } from "console";
 
 const Balances = ({ ...props }: RowProps) => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,9 @@ const Balances = ({ ...props }: RowProps) => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(fetchBalances({ getAccessTokenSilently }));
+      dispatch(fetchBalances({ getAccessTokenSilently }))
+        .unwrap()
+        .catch((error: string) => message.error(error));
     }
   }, []);
 

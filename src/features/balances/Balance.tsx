@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Modal, Spin, Avatar } from "antd";
+import { Card, Modal, Spin, Avatar, message } from "antd";
 import {
   SyncOutlined,
   DeleteOutlined,
@@ -78,9 +78,14 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               key="sync"
               onClick={async () => {
                 setSyncing(true);
-                await dispatch(
-                  fetchBalance({ getAccessTokenSilently, id: balance.id })
-                );
+                try {
+                  await dispatch(
+                    fetchBalance({ getAccessTokenSilently, id: balance.id })
+                  ).unwrap();
+                  message.success("Query updated");
+                } catch (error) {
+                  message.error(error as string);
+                }
                 setSyncing(false);
               }}
             />
@@ -97,10 +102,15 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               okText: "Yes",
               okType: "danger",
               cancelText: "No",
-              onOk() {
-                return dispatch(
-                  deleteWallets({ getAccessTokenSilently, id: balance.id })
-                );
+              async onOk() {
+                try {
+                  await dispatch(
+                    deleteWallets({ getAccessTokenSilently, id: balance.id })
+                  ).unwrap();
+                  message.success("Query deleted");
+                } catch (error) {
+                  message.error(error as string);
+                }
               },
             });
           }}

@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { message } from "antd";
 import { AxiosError } from "axios";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
@@ -50,14 +49,10 @@ export const networksSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchNetworks.fulfilled, (state, action) => {
-        networksAdapter.setAll(state, action.payload);
-        state.loaded = true;
-      })
-      .addCase(fetchNetworks.rejected, (_, action) => {
-        message.error(action.payload);
-      });
+    builder.addCase(fetchNetworks.fulfilled, (state, action) => {
+      networksAdapter.setAll(state, action.payload);
+      state.loaded = true;
+    });
   },
 });
 

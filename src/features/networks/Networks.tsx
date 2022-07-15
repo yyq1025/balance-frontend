@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Row, Col, RowProps } from "antd";
+import { Row, Col, RowProps, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import {
   selectNetworkNames,
@@ -15,7 +15,9 @@ const Networks = ({ ...props }: RowProps) => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(fetchNetworks());
+      dispatch(fetchNetworks())
+        .unwrap()
+        .catch((error: string) => message.error(error));
     }
   }, []);
 
