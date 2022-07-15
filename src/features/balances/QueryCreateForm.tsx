@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Modal, Select, message } from "antd";
+import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -24,6 +25,8 @@ const QueryCreateForm = ({
   const dispatch = useAppDispatch();
   const networksLoaded = useAppSelector(selectNetworksLoaded);
   const networkNames = useAppSelector(selectNetworkNames);
+
+  const navigate = useNavigate();
 
   const [form] = Form.useForm<QueryForm>();
   const [submitting, setSubmitting] = useState(false);
@@ -50,8 +53,12 @@ const QueryCreateForm = ({
           const values = await form.validateFields();
           await onCreate(values);
           form.resetFields();
+          navigate("/wallets");
         } catch (error) {
           console.error(error);
+          if (typeof error === "string") {
+            message.error(error);
+          }
         }
         setSubmitting(false);
       }}

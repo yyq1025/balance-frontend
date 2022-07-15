@@ -122,9 +122,13 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           avatar={
             <Avatar
               src={
-                balance.token === AddressZero
-                  ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network.toLowerCase()}/info/logo.png`
-                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network.toLowerCase()}/assets/${token}/logo.png`
+                token === AddressZero
+                  ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                      .replace("-", "")
+                      .toLowerCase()}/info/logo.png`
+                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                      .replace("-", "")
+                      .toLowerCase()}/assets/${token}/logo.png`
               }
               icon={<QuestionOutlined />}
             />

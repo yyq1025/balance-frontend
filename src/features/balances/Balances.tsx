@@ -8,7 +8,6 @@ import {
   fetchBalances,
 } from "./balancesSlice";
 import Balance from "./Balance";
-import { error } from "console";
 
 const Balances = ({ ...props }: RowProps) => {
   const dispatch = useAppDispatch();
