@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import "./index.css";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
 import App from "./App";
 import Networks from "./views/Networks";
 import reportWebVitals from "./reportWebVitals";
@@ -21,35 +22,37 @@ root.render(
       redirectUri={window.location.origin}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE || ""}
     >
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route
-                index
-                element={
-                  <Networks
-                    style={{
-                      maxWidth: "900px",
-                    }}
-                  />
-                }
-              />
-              <Route
-                path="wallets"
-                element={
-                  <Wallets
-                    style={{
-                      maxWidth: "900px",
-                      width: "100%",
-                    }}
-                  />
-                }
-              />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route
+                  index
+                  element={
+                    <Networks
+                      style={{
+                        maxWidth: "900px",
+                      }}
+                    />
+                  }
+                />
+                <Route
+                  path="wallets"
+                  element={
+                    <Wallets
+                      style={{
+                        maxWidth: "900px",
+                        width: "100%",
+                      }}
+                    />
+                  }
+                />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Provider>{" "}
+      </ThemeProvider>
     </Auth0Provider>
   </React.StrictMode>
 );
