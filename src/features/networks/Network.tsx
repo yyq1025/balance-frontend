@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Space, message } from "antd";
+import { message } from "antd";
 import {
   Avatar,
   Card,
@@ -12,7 +12,10 @@ import {
   IconButton,
   Link,
 } from "@mui/material";
-import { ContentCopy, Done, SwapHoriz, OpenInNew } from "@mui/icons-material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneIcon from "@mui/icons-material/Done";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import copy from "clipboard-copy";
 // import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
@@ -53,38 +56,23 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
 
   const { ethereum } = window;
 
-  const handleSwitch = async () => {
-    if (ethereum) {
-      try {
-        await ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: network.chainId,
-              chainName: network.name,
-              nativeCurrency: {
-                symbol: network.symbol,
-                decimals: 18,
-              },
-              rpcUrls: [network.url],
-              blockExplorerUrls: [network.explorer],
-            },
-          ],
-        });
-      } catch (e) {
-        message.error((e as ProviderRpcError).message);
-      }
-    } else {
-      message.error("MetaMask is not installed");
-    }
-  };
-
-  // const handleSet = async () => {
+  // const handleSwitch = async () => {
   //   if (ethereum) {
   //     try {
   //       await ethereum.request({
-  //         method: "wallet_switchEthereumChain",
-  //         params: [{ chainId: network.chainId }],
+  //         method: "wallet_addEthereumChain",
+  //         params: [
+  //           {
+  //             chainId: network.chainId,
+  //             chainName: network.name,
+  //             nativeCurrency: {
+  //               symbol: network.symbol,
+  //               decimals: 18,
+  //             },
+  //             rpcUrls: [network.url],
+  //             blockExplorerUrls: [network.explorer],
+  //           },
+  //         ],
   //       });
   //     } catch (e) {
   //       message.error((e as ProviderRpcError).message);
@@ -93,6 +81,44 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   //     message.error("MetaMask is not installed");
   //   }
   // };
+
+  const handleSwitch = async () => {
+    if (ethereum) {
+      try {
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: network.chainId }],
+        });
+      } catch (e) {
+        const err = e as ProviderRpcError;
+        if (err.code === 4902) {
+          try {
+            await ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: network.chainId,
+                  chainName: network.name,
+                  nativeCurrency: {
+                    symbol: network.symbol,
+                    decimals: 18,
+                  },
+                  rpcUrls: [network.url],
+                  blockExplorerUrls: [network.explorer],
+                },
+              ],
+            });
+          } catch (e) {
+            message.error((e as ProviderRpcError).message);
+          }
+        } else {
+          message.error(err.message);
+        }
+      }
+    } else {
+      message.error("MetaMask is not installed");
+    }
+  };
 
   return (
     // <Card
@@ -118,46 +144,61 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
     // </Card>
     <Card>
       <CardHeader
-        avatar={<Avatar src={`/assets/${network.name}.svg`} />}
+        avatar={
+          <Avatar
+            src={`/assets/${network.name}.svg`}
+            sx={{ width: 32, height: 32 }}
+          />
+        }
         title={<Typography variant="subtitle1">{network.name}</Typography>}
       />
       {/* <Divider /> */}
       <CardContent>
-        <Button
-          variant="text"
-          endIcon={
-            copied ? <Done color="primary" /> : <ContentCopy color="action" />
-          }
-          onClick={handleCopy}
-          color="inherit"
-          disableElevation
-          style={{
-            maxWidth: "100%",
-            textTransform: "none",
-            // display: "flex",
-            // justifyContent: "flex-start",
-          }}
-        >
-          <Typography variant="body2" color="text.secondary" noWrap>
-            {network.url}
-          </Typography>
-        </Button>
+        <Tooltip title={copied ? "Copied" : "Copy RPC URL"}>
+          <Button
+            variant="text"
+            endIcon={
+              copied ? (
+                <DoneIcon color="primary" />
+              ) : (
+                <ContentCopyIcon color="action" />
+              )
+            }
+            onClick={handleCopy}
+            color="inherit"
+            disableElevation
+            style={{
+              maxWidth: "100%",
+              textTransform: "none",
+              // display: "flex",
+              // justifyContent: "flex-start",
+            }}
+          >
+            <Typography variant="body2" color="text.secondary" noWrap>
+              {network.url}
+            </Typography>
+          </Button>
+        </Tooltip>
       </CardContent>
       <CardActions>
         <Tooltip title={`Switch to ${network.name}`}>
           <IconButton onClick={handleSwitch}>
-            <SwapHoriz />
+            <SwapHorizIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title={`Open block explorer in a new tab`}>
-          <IconButton
-            component={Link}
+        <Tooltip title="Open block explorer">
+          <Link
             href={network.explorer}
             target="_blank"
             rel="noreferrer"
+            color="inherit"
           >
-            <OpenInNew />
-          </IconButton>
+            <IconButton
+            // component={Link}
+            >
+              <OpenInNewIcon />
+            </IconButton>
+          </Link>
         </Tooltip>
       </CardActions>
     </Card>

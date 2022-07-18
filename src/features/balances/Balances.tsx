@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Row, Col, RowProps, message } from "antd";
+import { message } from "antd";
+import Grid, { GridProps } from "@mui/material/Grid";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -9,7 +10,7 @@ import {
 } from "./balancesSlice";
 import Balance from "./Balance";
 
-const Balances = ({ ...props }: RowProps) => {
+const Balances = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();
   const { getAccessTokenSilently } = useAuth0();
   const balanceIds = useAppSelector(selectBalanceIds);
@@ -24,13 +25,13 @@ const Balances = ({ ...props }: RowProps) => {
   }, []);
 
   return (
-    <Row {...props} gutter={[16, 16]}>
+    <Grid {...props} container spacing={2}>
       {balanceIds.map((balanceId) => (
-        <Col span={8} key={balanceId}>
+        <Grid item md={4} sm={6} xs={12} key={balanceId}>
           <Balance balanceId={balanceId} />
-        </Col>
+        </Grid>
       ))}
-    </Row>
+    </Grid>
   );
 };
 

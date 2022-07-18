@@ -31,9 +31,10 @@ root.render(
                   index
                   element={
                     <Networks
-                      style={{
-                        maxWidth: "900px",
-                      }}
+                      // sx={{
+                      //   maxWidth: "900px",
+                      // }}
+                      maxWidth="md"
                     />
                   }
                 />

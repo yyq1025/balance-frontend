@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Row, Col, RowProps, message } from "antd";
+import { message } from "antd";
+import Grid, { GridProps } from "@mui/material/Grid";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import {
   selectNetworkNames,
@@ -8,7 +9,7 @@ import {
 } from "./networksSlice";
 import Network from "./Network";
 
-const Networks = ({ ...props }: RowProps) => {
+const Networks = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();
   const networkNames = useAppSelector(selectNetworkNames);
   const loaded = useAppSelector(selectNetworksLoaded);
@@ -22,13 +23,13 @@ const Networks = ({ ...props }: RowProps) => {
   }, []);
 
   return (
-    <Row {...props} gutter={[16, 16]}>
+    <Grid {...props} container spacing={2}>
       {networkNames.map((networkName) => (
-        <Col span={8} key={networkName}>
+        <Grid item md={4} sm={6} xs={12} key={networkName}>
           <Network networkName={networkName} />
-        </Col>
+        </Grid>
       ))}
-    </Row>
+    </Grid>
   );
 };
 
