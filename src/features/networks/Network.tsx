@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Avatar, Space, message, Typography } from "antd";
+import { Card, Avatar, Space, message, Typography, Tooltip } from "antd";
 import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../common/hooks";
@@ -51,6 +51,8 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
       } catch (e) {
         message.error((e as ProviderRpcError).message);
       }
+    } else {
+      message.error("MetaMask is not installed");
     }
   };
 
@@ -64,6 +66,8 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
       } catch (e) {
         message.error((e as ProviderRpcError).message);
       }
+    } else {
+      message.error("MetaMask is not installed");
     }
   };
 
@@ -77,8 +81,12 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
       }
       bordered={false}
       actions={[
-        <PlusCircleOutlined key="add" onClick={handleAdd} />,
-        <SwapOutlined key="set" onClick={handleSet} />,
+        <Tooltip key="add" title={`Add ${network.name} to MetaMask`}>
+          <PlusCircleOutlined onClick={handleAdd} />
+        </Tooltip>,
+        <Tooltip key="switch" title={`Switch to ${network.name}`}>
+          <SwapOutlined onClick={handleSet} />
+        </Tooltip>,
       ]}
     >
       <Text ellipsis copyable type="secondary" style={{ width: "100%" }}>

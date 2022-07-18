@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Modal, Spin, Avatar, message } from "antd";
+import { Card, Modal, Spin, Avatar, message, Typography } from "antd";
 import {
   SyncOutlined,
   DeleteOutlined,
@@ -18,7 +18,7 @@ import {
   deleteWallets,
 } from "./balancesSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
-import EllipsisMiddle from "../../common/EllipsisMiddle";
+const { Text } = Typography;
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
@@ -50,9 +50,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <EllipsisMiddle copyable={!balance.tag} suffixCount={4}>
+          <Text copyable={!balance.tag} style={{ width: "60%" }} ellipsis>
             {balance.tag || address}
-          </EllipsisMiddle>
+          </Text>
         </a>
       }
       extra={
