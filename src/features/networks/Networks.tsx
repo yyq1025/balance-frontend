@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { message } from "antd";
 import Grid, { GridProps } from "@mui/material/Grid";
+import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import {
   selectNetworkNames,
@@ -14,11 +14,13 @@ const Networks = ({ ...props }: GridProps) => {
   const networkNames = useAppSelector(selectNetworkNames);
   const loaded = useAppSelector(selectNetworksLoaded);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     if (!loaded) {
       dispatch(fetchNetworks())
         .unwrap()
-        .catch((error: string) => message.error(error));
+        .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 

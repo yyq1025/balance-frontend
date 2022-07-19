@@ -5,6 +5,6 @@ export interface ErrorResponse {
 export interface QueryForm {
   address: string;
   network: string;
-  token?: string;
-  tag?: string;
+  token: string;
+  tag: string;
 }

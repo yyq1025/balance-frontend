@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { message } from "antd";
 import {
   Avatar,
   Card,
@@ -16,6 +15,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { useSnackbar } from "notistack";
 import copy from "clipboard-copy";
 // import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
@@ -42,6 +42,8 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   );
 
   const [copied, setCopied] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   if (!network) {
     return null;
@@ -109,14 +111,16 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
               ],
             });
           } catch (e) {
-            message.error((e as ProviderRpcError).message);
+            enqueueSnackbar((e as ProviderRpcError).message, {
+              variant: "error",
+            });
           }
         } else {
-          message.error(err.message);
+          enqueueSnackbar(err.message, { variant: "error" });
         }
       }
     } else {
-      message.error("MetaMask is not installed");
+      enqueueSnackbar("MetaMask is not installed", { variant: "error" });
     }
   };
 
@@ -193,9 +197,7 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
             rel="noreferrer"
             color="inherit"
           >
-            <IconButton
-            // component={Link}
-            >
+            <IconButton>
               <OpenInNewIcon />
             </IconButton>
           </Link>

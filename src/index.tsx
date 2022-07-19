@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { ThemeProvider } from "@mui/material/styles";
+import { SnackbarProvider } from "notistack";
 import theme from "./theme";
 import App from "./App";
 import Networks from "./views/Networks";
@@ -22,38 +23,40 @@ root.render(
       redirectUri={window.location.origin}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE || ""}
     >
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<App />}>
-                <Route
-                  index
-                  element={
-                    <Networks
-                      // sx={{
-                      //   maxWidth: "900px",
-                      // }}
-                      maxWidth="md"
-                    />
-                  }
-                />
-                <Route
-                  path="wallets"
-                  element={
-                    <Wallets
-                      style={{
-                        maxWidth: "900px",
-                        width: "100%",
-                      }}
-                    />
-                  }
-                />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </Provider>{" "}
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider maxSnack={3}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route
+                    index
+                    element={
+                      <Networks
+                        // sx={{
+                        //   maxWidth: "900px",
+                        // }}
+                        maxWidth="md"
+                      />
+                    }
+                  />
+                  <Route
+                    path="wallets"
+                    element={
+                      <Wallets
+                        style={{
+                          maxWidth: "900px",
+                          width: "100%",
+                        }}
+                      />
+                    }
+                  />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </SnackbarProvider>
+        </ThemeProvider>
+      </Provider>
     </Auth0Provider>
   </React.StrictMode>
 );

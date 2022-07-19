@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { message } from "antd";
 import Grid, { GridProps } from "@mui/material/Grid";
+import { useSnackbar } from "notistack";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -16,11 +16,13 @@ const Balances = ({ ...props }: GridProps) => {
   const balanceIds = useAppSelector(selectBalanceIds);
   const loaded = useAppSelector(selectBalancesLoaded);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     if (!loaded) {
       dispatch(fetchBalances({ getAccessTokenSilently }))
         .unwrap()
-        .catch((error: string) => message.error(error));
+        .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 

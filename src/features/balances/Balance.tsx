@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Spin, message } from "antd";
+import { Modal } from "antd";
 import {
   Avatar,
   Card,
@@ -19,14 +19,9 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import { useSnackbar } from "notistack";
 import copy from "clipboard-copy";
-import {
-  SyncOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
-  LoadingOutlined,
-  QuestionOutlined,
-} from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { getAddress } from "@ethersproject/address";
 import type { EntityId } from "@reduxjs/toolkit";
 import { AddressZero } from "@ethersproject/constants";
@@ -38,13 +33,14 @@ import {
   deleteWallets,
 } from "./balancesSlice";
 import { selectNetworkByName } from "../networks/networksSlice";
-// const { Text } = Typography;
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
   const { getAccessTokenSilently } = useAuth0();
   const [syncing, setSyncing] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const balance = useAppSelector((state) =>
     selectBalanceById(state, balanceId)
@@ -176,6 +172,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           noWrap: true,
         }}
         subheader={balance.network}
+        subheaderTypographyProps={{ noWrap: true }}
         action={
           <Tooltip title="Refresh balance">
             <IconButton
@@ -186,9 +183,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
                   await dispatch(
                     fetchBalance({ getAccessTokenSilently, id: balance.id })
                   ).unwrap();
-                  message.success("Query updated");
+                  enqueueSnackbar("Query updated", { variant: "success" });
                 } catch (error) {
-                  message.error(error as string);
+                  enqueueSnackbar(error as string, { variant: "error" });
                 }
                 setSyncing(false);
               }}
@@ -259,9 +256,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
                     await dispatch(
                       deleteWallets({ getAccessTokenSilently, id: balance.id })
                     ).unwrap();
-                    message.success("Query deleted");
+                    enqueueSnackbar("Query deleted", { variant: "success" });
                   } catch (error) {
-                    message.error(error as string);
+                    enqueueSnackbar(error as string, { variant: "error" });
                   }
                 },
               });
