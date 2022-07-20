@@ -14,7 +14,6 @@ interface Balance {
   address: string;
   network: string;
   token: string;
-  tag?: string;
   symbol: string;
   balance: string;
 }

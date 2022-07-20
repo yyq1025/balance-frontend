@@ -45,7 +45,7 @@ const QueryCreateForm = ({
     formState: { errors, isSubmitSuccessful },
   } = useForm<QueryForm>({
     mode: "onChange",
-    defaultValues: { address: "", network: "Ethereum", token: "", tag: "" },
+    defaultValues: { address: "", network: "Ethereum", token: "" },
   });
 
   const onSubmit: SubmitHandler<QueryForm> = async (data) => {
@@ -71,7 +71,7 @@ const QueryCreateForm = ({
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ address: "", network: "Ethereum", token: "", tag: "" });
+      reset({ address: "", network: "Ethereum", token: "" });
       onCancel();
       // navigate("/wallets");
     }
@@ -135,13 +135,6 @@ const QueryCreateForm = ({
           error={!!errors?.token}
           helperText={errors?.token?.message}
         />
-        {/* <TextField
-          label="Tag"
-          fullWidth
-          margin="normal"
-          disabled={submitting}
-          {...register("tag")}
-        /> */}
       </DialogContent>
       <DialogActions>
         <Button disabled={submitting} onClick={onCancel}>

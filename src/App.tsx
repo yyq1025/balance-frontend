@@ -149,7 +149,7 @@ const App = () => {
             open
           >
             {drawer}
-            <Box sx={{ m: "16px" }}>
+            <Box sx={{ m: 2 }}>
               <QueryButton variant="extended" color="primary" />
             </Box>
           </Drawer>

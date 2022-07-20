@@ -6,5 +6,4 @@ export interface QueryForm {
   address: string;
   network: string;
   token: string;
-  tag: string;
 }

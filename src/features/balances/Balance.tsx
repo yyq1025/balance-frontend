@@ -98,13 +98,18 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             </Avatar>
           }
           title={
-            balance.balance
-              ? balance.balance + " " + balance.symbol
-              : "Cannot get balance"
+            balance.balance ? (
+              <Tooltip
+                title={`${balance.balance} ${balance.symbol} @ ${balance.network}`}
+              >
+                <Typography variant="body2" noWrap>
+                  {`${balance.balance} ${balance.symbol}`}
+                </Typography>
+              </Tooltip>
+            ) : (
+              "Cannot get balance"
+            )
           }
-          titleTypographyProps={{
-            noWrap: true,
-          }}
           subheader={balance.network}
           subheaderTypographyProps={{ noWrap: true }}
           action={
@@ -177,7 +182,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             </Link>
           </Tooltip>
           <Tooltip title="Delete this query" sx={{ ml: "auto" }}>
-            <IconButton onClick={() => setOpen(true)}>
+            <IconButton color="error" onClick={() => setOpen(true)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -196,7 +201,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           </Button>
           <LoadingButton
             loading={deleting}
-            color="warning"
+            color="error"
             onClick={async () => {
               setDeleting(true);
               try {
