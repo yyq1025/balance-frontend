@@ -21,7 +21,6 @@ import type { EntityId } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../common/hooks";
 import { selectNetworkByName } from "./networksSlice";
 import { MetaMaskInpageProvider } from "@metamask/providers";
-// const { Title, Text } = Typography;
 
 declare global {
   interface Window {
@@ -56,32 +55,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   };
 
   const { ethereum } = window;
-
-  // const handleSwitch = async () => {
-  //   if (ethereum) {
-  //     try {
-  //       await ethereum.request({
-  //         method: "wallet_addEthereumChain",
-  //         params: [
-  //           {
-  //             chainId: network.chainId,
-  //             chainName: network.name,
-  //             nativeCurrency: {
-  //               symbol: network.symbol,
-  //               decimals: 18,
-  //             },
-  //             rpcUrls: [network.url],
-  //             blockExplorerUrls: [network.explorer],
-  //           },
-  //         ],
-  //       });
-  //     } catch (e) {
-  //       message.error((e as ProviderRpcError).message);
-  //     }
-  //   } else {
-  //     message.error("MetaMask is not installed");
-  //   }
-  // };
 
   const handleSwitch = async () => {
     if (ethereum) {
@@ -124,27 +97,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   };
 
   return (
-    // <Card
-    //   title={
-    //     <Space size="middle">
-    //       <Avatar src={`/assets/${network.name}.svg`} />
-    //       <Title level={5}>{network.name}</Title>
-    //     </Space>
-    //   }
-    //   bordered={false}
-    //   actions={[
-    //     <Tooltip key="add" title={`Add ${network.name} to MetaMask`}>
-    //       <PlusCircleOutlined onClick={handleAdd} />
-    //     </Tooltip>,
-    //     <Tooltip key="switch" title={`Switch to ${network.name}`}>
-    //       <SwapOutlined onClick={handleSet} />
-    //     </Tooltip>,
-    //   ]}
-    // >
-    //   <Text ellipsis copyable type="secondary" style={{ width: "100%" }}>
-    //     {network.url}
-    //   </Text>
-    // </Card>
     <Card>
       <CardHeader
         avatar={
@@ -155,7 +107,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
         }
         title={<Typography variant="subtitle1">{network.name}</Typography>}
       />
-      {/* <Divider /> */}
       <CardContent>
         <Tooltip title={copied ? "Copied" : "Copy RPC URL"}>
           <Button
@@ -172,8 +123,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
             disableElevation
             style={{
               maxWidth: "100%",
-              // display: "flex",
-              // justifyContent: "flex-start",
             }}
           >
             <Typography variant="body2" color="text.secondary" noWrap>

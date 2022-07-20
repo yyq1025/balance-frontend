@@ -2,15 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { ThemeProvider } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider, makeStyles } from "@mui/material/styles";
 import { SnackbarProvider } from "notistack";
 import theme from "./theme";
 import App from "./App";
-import Networks from "./views/Networks";
+import NetworksView from "./views/NetworksView";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./app/store";
-import Queries from "./views/Queries";
+import QueriesView from "./views/QueriesView";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -25,40 +27,25 @@ root.render(
     >
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <SnackbarProvider
-            maxSnack={3}
-            anchorOrigin={{ horizontal: "right", vertical: "top" }}
+          <CssBaseline />
+          {/* <Box
+            sx={{
+              "& .SnackbarContainer-bottom": {
+                bottom: "72px !important",
+              },
+            }}
           >
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<App />}>
-                  <Route
-                    index
-                    element={
-                      <Networks
-                        // sx={{
-                        //   maxWidth: "900px",
-                        // }}
-                        maxWidth="md"
-                      />
-                    }
-                  />
-                  <Route
-                    path="queries"
-                    element={
-                      <Queries
-                        maxWidth="md"
-                        // style={{
-                        //   maxWidth: "900px",
-                        //   width: "100%",
-                        // }}
-                      />
-                    }
-                  />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </SnackbarProvider>
+            <SnackbarProvider maxSnack={3}> */}
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route index element={<NetworksView maxWidth="md" />} />
+                <Route path="queries" element={<QueriesView maxWidth="md" />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+          {/* </SnackbarProvider>
+          </Box> */}
         </ThemeProvider>
       </Provider>
     </Auth0Provider>

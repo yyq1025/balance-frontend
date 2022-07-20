@@ -13,13 +13,8 @@ import {
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
-// const { Text } = Typography;
 
-interface NavbarProps extends ToolbarProps {
-  title: string;
-}
-
-const Navbar = ({ title, ...props }: NavbarProps) => {
+const Navbar = ({ title }: { title: string }) => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const logoutWithRedirect = () => {
     logout({
@@ -38,15 +33,6 @@ const Navbar = ({ title, ...props }: NavbarProps) => {
 
   return (
     <>
-      {/* <Text
-        style={{
-          fontSize: "24px",
-          fontWeight: 600,
-          textTransform: "capitalize",
-        }}
-      >
-        {title}
-      </Text> */}
       <Typography
         variant="h6"
         sx={{ flexGrow: 1, textTransform: "capitalize" }}
@@ -68,28 +54,7 @@ const Navbar = ({ title, ...props }: NavbarProps) => {
           </Menu>
         </>
       ) : (
-        // <Dropdown
-        //   overlay={
-        //     <Menu
-        //       items={[
-        //         {
-        //           key: "logout",
-        //           icon: <LogoutOutlined />,
-        //           label: "Logout",
-        //           onClick: logoutWithRedirect,
-        //         },
-        //       ]}
-        //     />
-        //   }
-        //   trigger={["click"]}
-        // >
-        //   <Button type="text" icon={<UserOutlined />}>
-        //     {user?.email}
-        //   </Button>
-        // </Dropdown>
         <Button
-          // type="primary"
-          // icon={<LoginOutlined />}
           variant="outlined"
           startIcon={<LoginIcon />}
           onClick={loginWithRedirect}
