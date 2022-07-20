@@ -25,7 +25,10 @@ root.render(
     >
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <SnackbarProvider maxSnack={3}>
+          <SnackbarProvider
+            maxSnack={3}
+            anchorOrigin={{ horizontal: "right", vertical: "top" }}
+          >
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<App />}>

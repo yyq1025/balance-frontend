@@ -193,7 +193,8 @@ const App = () => {
               </ListItemButton>
             </ListItem>
           </List>
-          <div style={{ margin: "16px" }}>
+          {/* <div style={{ margin: "auto" }}> */}
+          <Box sx={{ m: "16px" }}>
             {isAuthenticated ? (
               <QueryButton
                 // type="primary"
@@ -221,7 +222,8 @@ const App = () => {
                 Login
               </Fab>
             )}
-          </div>
+          </Box>
+          {/* </div> */}
         </Drawer>
       </Box>
       {/* </Sider> */}
@@ -249,6 +251,45 @@ const App = () => {
       </Box>
       {/* </Content> */}
       {/* </Layout> */}
+      {isAuthenticated ? (
+        <QueryButton
+          // type="primary"
+          // shape="round"
+          variant="extended"
+          color="primary"
+          disabled={!user?.email_verified}
+          sx={{
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+            display: { sm: "none" },
+          }}
+          // icon={<PlusOutlined />}
+          // block
+        >
+          <AddIcon sx={{ mr: 1 }} />
+          Add query
+        </QueryButton>
+      ) : (
+        <Fab
+          // type="primary"
+          // shape="round"
+          // icon={<LoginOutlined />}
+          // block
+          variant="extended"
+          color="primary"
+          onClick={loginWithRedirect}
+          sx={{
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+            display: { sm: "none" },
+          }}
+        >
+          <LoginIcon sx={{ mr: 1 }} />
+          Login
+        </Fab>
+      )}
     </Box>
   );
 };

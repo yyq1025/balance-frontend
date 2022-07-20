@@ -22,7 +22,7 @@ const QueryButton = ({ ...props }: FabProps) => {
     <Button
       variant="text"
       color="inherit"
-      onClick={() => navigate("/wallets")}
+      onClick={() => navigate("/queries")}
       key={snackbarId}
     >
       View
