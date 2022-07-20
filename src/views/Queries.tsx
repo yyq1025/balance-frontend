@@ -1,23 +1,23 @@
 import React from "react";
-import { Space, Card, SpaceProps, Button } from "antd";
-import { LoginOutlined } from "@ant-design/icons";
+import { Alert } from "@mui/material";
+import { GridProps } from "@mui/material/Grid";
 import { useAuth0 } from "@auth0/auth0-react";
-import Actions from "../features/balances/QueryButton";
+// import Actions from "../features/balances/QueryButton";
 import Balances from "../features/balances/Balances";
 
-const Wallets = ({ ...props }: SpaceProps) => {
+const Queries = ({ ...props }: GridProps) => {
   const { isAuthenticated, user } = useAuth0();
 
   return (
-    <Space {...props} direction="vertical" size="middle">
+    <>
       {isAuthenticated ? (
         user?.email_verified ? (
-          <Balances />
+          <Balances {...props} />
         ) : (
-          <Card>Verify your email to add queries</Card>
+          <Alert severity="warning">Verify your email to add queries</Alert>
         )
       ) : (
-        <Card>Login to add queries</Card>
+        <Alert severity="info">Login to add queries</Alert>
       )}
       {/* <Card>
         {isAuthenticated ? (
@@ -29,8 +29,8 @@ const Wallets = ({ ...props }: SpaceProps) => {
         )}
       </Card>
       {isAuthenticated && <Balances />} */}
-    </Space>
+    </>
   );
 };
 
-export default Wallets;
+export default Queries;

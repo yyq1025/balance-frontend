@@ -1,10 +1,21 @@
 import React from "react";
-import { Row, Button, Typography, RowProps, Dropdown, Menu } from "antd";
-import { LoginOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  Button,
+  ToolbarProps,
+  Typography,
+  IconButton,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
-const { Text } = Typography;
+// const { Text } = Typography;
 
-interface NavbarProps extends RowProps {
+interface NavbarProps extends ToolbarProps {
   title: string;
 }
 
@@ -16,9 +27,18 @@ const Navbar = ({ title, ...props }: NavbarProps) => {
     });
   };
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Row {...props} justify="space-between" align="middle">
-      <Text
+    <>
+      {/* <Text
         style={{
           fontSize: "24px",
           fontWeight: 600,
@@ -26,37 +46,58 @@ const Navbar = ({ title, ...props }: NavbarProps) => {
         }}
       >
         {title}
-      </Text>
+      </Text> */}
+      <Typography
+        variant="h6"
+        sx={{ flexGrow: 1, textTransform: "capitalize" }}
+      >
+        {title}
+      </Typography>
       {isAuthenticated ? (
-        <Dropdown
-          overlay={
-            <Menu
-              items={[
-                {
-                  key: "logout",
-                  icon: <LogoutOutlined />,
-                  label: "Logout",
-                  onClick: logoutWithRedirect,
-                },
-              ]}
-            />
-          }
-          trigger={["click"]}
-        >
-          <Button type="text" icon={<UserOutlined />}>
-            {user?.email}
-          </Button>
-        </Dropdown>
+        <>
+          <IconButton onClick={handleClick}>
+            <Avatar src={user?.picture} />
+          </IconButton>
+          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <MenuItem onClick={logoutWithRedirect}>
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </MenuItem>
+          </Menu>
+        </>
       ) : (
+        // <Dropdown
+        //   overlay={
+        //     <Menu
+        //       items={[
+        //         {
+        //           key: "logout",
+        //           icon: <LogoutOutlined />,
+        //           label: "Logout",
+        //           onClick: logoutWithRedirect,
+        //         },
+        //       ]}
+        //     />
+        //   }
+        //   trigger={["click"]}
+        // >
+        //   <Button type="text" icon={<UserOutlined />}>
+        //     {user?.email}
+        //   </Button>
+        // </Dropdown>
         <Button
           // type="primary"
-          icon={<LoginOutlined />}
+          // icon={<LoginOutlined />}
+          variant="outlined"
+          startIcon={<LoginIcon />}
           onClick={loginWithRedirect}
         >
           Login
         </Button>
       )}
-    </Row>
+    </>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Modal } from "antd";
 import {
   Dialog,
   TextField,
@@ -7,18 +6,11 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  FormHelperText,
   Autocomplete,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectNetworkNames,
@@ -26,20 +18,13 @@ import {
   fetchNetworks,
 } from "../networks/networksSlice";
 import { isAddress } from "@ethersproject/address";
-import type { ErrorResponse, QueryForm } from "../../common/types";
+import type { QueryForm } from "../../common/types";
 
 interface QueryCreateFormProps {
   visible: boolean;
   onCreate: (values: QueryForm) => Promise<void>;
   onCancel: () => void;
 }
-
-// interface FormInputs {
-//   address: string;
-//   network: string;
-//   token: string;
-//   tag: string;
-// }
 
 const QueryCreateForm = ({
   visible,
@@ -50,9 +35,6 @@ const QueryCreateForm = ({
   const networksLoaded = useAppSelector(selectNetworksLoaded);
   const networkNames = useAppSelector(selectNetworkNames);
 
-  const navigate = useNavigate();
-
-  const [form] = Form.useForm<QueryForm>();
   const [submitting, setSubmitting] = useState(false);
 
   const {
@@ -91,7 +73,7 @@ const QueryCreateForm = ({
     if (isSubmitSuccessful) {
       reset({ address: "", network: "Ethereum", token: "", tag: "" });
       onCancel();
-      navigate("/wallets");
+      // navigate("/wallets");
     }
   }, [isSubmitSuccessful]);
 
@@ -216,6 +198,7 @@ const QueryCreateForm = ({
           label="Address"
           fullWidth
           margin="normal"
+          disabled={submitting}
           {...register("address", {
             required: "Please enter an address",
             validate: (value) =>
@@ -252,6 +235,7 @@ const QueryCreateForm = ({
               disableClearable
               onChange={(_, v) => onChange(v)}
               fullWidth
+              disabled={submitting}
               options={networkNames}
               renderInput={(params) => (
                 <TextField
@@ -292,6 +276,7 @@ const QueryCreateForm = ({
           label="Token"
           fullWidth
           margin="normal"
+          disabled={submitting}
           placeholder="Leave empty to query native token"
           {...register("token", {
             validate: (value) =>
@@ -300,10 +285,16 @@ const QueryCreateForm = ({
           error={!!errors?.token}
           helperText={errors?.token?.message}
         />
-        <TextField label="Tag" fullWidth margin="normal" {...register("tag")} />
+        <TextField
+          label="Tag"
+          fullWidth
+          margin="normal"
+          disabled={submitting}
+          {...register("tag")}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} sx={{ textTransform: "none" }}>
+        <Button disabled={submitting} onClick={onCancel}>
           Cancel
         </Button>
         <LoadingButton
@@ -311,7 +302,6 @@ const QueryCreateForm = ({
           disableElevation
           loading={submitting}
           onClick={handleSubmit(onSubmit)}
-          sx={{ textTransform: "none" }}
         >
           Create
         </LoadingButton>

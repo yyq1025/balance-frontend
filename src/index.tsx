@@ -10,7 +10,7 @@ import Networks from "./views/Networks";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./app/store";
-import Wallets from "./views/Wallets";
+import Queries from "./views/Queries";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -41,13 +41,14 @@ root.render(
                     }
                   />
                   <Route
-                    path="wallets"
+                    path="queries"
                     element={
-                      <Wallets
-                        style={{
-                          maxWidth: "900px",
-                          width: "100%",
-                        }}
+                      <Queries
+                        maxWidth="md"
+                        // style={{
+                        //   maxWidth: "900px",
+                        //   width: "100%",
+                        // }}
                       />
                     }
                   />

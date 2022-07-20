@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.10.2",
-    "@craco/craco": "^6.4.5",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@ethersproject/address": "^5.6.1",
@@ -21,10 +20,8 @@
     "@types/node": "^18.0.6",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
-    "antd": "^4.21.7",
     "axios": "^0.27.2",
     "clipboard-copy": "^4.0.1",
-    "craco-less": "^2.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "notistack": "^2.0.5",
     "react": "^18.2.0",
@@ -37,9 +34,9 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

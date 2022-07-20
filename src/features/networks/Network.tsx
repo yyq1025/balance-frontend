@@ -17,7 +17,6 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useSnackbar } from "notistack";
 import copy from "clipboard-copy";
-// import { PlusCircleOutlined, SwapOutlined } from "@ant-design/icons";
 import type { EntityId } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../common/hooks";
 import { selectNetworkByName } from "./networksSlice";
@@ -173,7 +172,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
             disableElevation
             style={{
               maxWidth: "100%",
-              textTransform: "none",
               // display: "flex",
               // justifyContent: "flex-start",
             }}

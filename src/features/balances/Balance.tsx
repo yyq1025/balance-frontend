@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Modal } from "antd";
 import {
   Avatar,
   Card,
@@ -12,7 +11,13 @@ import {
   CircularProgress,
   Link,
   Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import DoneIcon from "@mui/icons-material/Done";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -21,7 +26,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { useSnackbar } from "notistack";
 import copy from "clipboard-copy";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { getAddress } from "@ethersproject/address";
 import type { EntityId } from "@reduxjs/toolkit";
 import { AddressZero } from "@ethersproject/constants";
@@ -39,6 +43,8 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const { getAccessTokenSilently } = useAuth0();
   const [syncing, setSyncing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -67,208 +73,209 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   };
 
   return (
-    <Card
-    // title={
-    //   <a
-    //     href={`${network.explorer}/address/${address}`}
-    //     target="_blank"
-    //     rel="noopener noreferrer"
-    //   >
-    //     <Text copyable={!balance.tag} style={{ width: "60%" }} ellipsis>
-    //       {balance.tag || address}
-    //     </Text>
-    //   </a>
-    // }
-    // extra={
-    //   <a
-    //     href={
-    //       token === AddressZero
-    //         ? `${network.explorer}/address/${address}`
-    //         : `${network.explorer}/token/${token}?a=${address}`
-    //     }
-    //     target="_blank"
-    //     rel="noopener noreferrer"
-    //   >
-    //     More
-    //   </a>
-    // }
-    // bordered={false}
-    // actions={[
-    //   <>
-    //     {syncing ? (
-    //       <LoadingOutlined />
-    //     ) : (
-    //       <SyncOutlined
-    //         key="sync"
-    //         onClick={async () => {
-    //           setSyncing(true);
-    //           try {
-    //             await dispatch(
-    //               fetchBalance({ getAccessTokenSilently, id: balance.id })
-    //             ).unwrap();
-    //             message.success("Query updated");
-    //           } catch (error) {
-    //             message.error(error as string);
-    //           }
-    //           setSyncing(false);
-    //         }}
-    //       />
-    //     )}
-    //   </>,
-    //   <DeleteOutlined
-    //     key="delete"
-    //     style={{ color: "red" }}
-    //     onClick={() => {
-    //       Modal.confirm({
-    //         title: "Are you sure delete this query?",
-    //         icon: <ExclamationCircleOutlined />,
-    //         content: "This will permanently delete this query.",
-    //         okText: "Yes",
-    //         okType: "danger",
-    //         cancelText: "No",
-    //         async onOk() {
-    //           try {
-    //             await dispatch(
-    //               deleteWallets({ getAccessTokenSilently, id: balance.id })
-    //             ).unwrap();
-    //             message.success("Query deleted");
-    //           } catch (error) {
-    //             message.error(error as string);
-    //           }
-    //         },
-    //       });
-    //     }}
-    //   />,
-    // ]}
-    >
-      <CardHeader
-        sx={{
-          "& .MuiCardHeader-content": {
-            overflow: "hidden",
-          },
-        }}
-        avatar={
-          <Avatar
-            sx={{ width: 32, height: 32 }}
-            src={
-              token === AddressZero
-                ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network
-                    .replace("-", "")
-                    .toLowerCase()}/info/logo.png`
-                : `https://assets-cdn.trustwallet.com/blockchains/${balance.network
-                    .replace("-", "")
-                    .toLowerCase()}/assets/${token}/logo.png`
-            }
-          >
-            <QuestionMarkIcon />
-          </Avatar>
-        }
-        title={
-          balance.balance
-            ? balance.balance + " " + balance.symbol
-            : "Cannot get balance"
-        }
-        titleTypographyProps={{
-          noWrap: true,
-        }}
-        subheader={balance.network}
-        subheaderTypographyProps={{ noWrap: true }}
-        action={
-          <Tooltip title="Refresh balance">
-            <IconButton
-              disabled={syncing}
-              onClick={async () => {
-                setSyncing(true);
-                try {
-                  await dispatch(
-                    fetchBalance({ getAccessTokenSilently, id: balance.id })
-                  ).unwrap();
-                  enqueueSnackbar("Query updated", { variant: "success" });
-                } catch (error) {
-                  enqueueSnackbar(error as string, { variant: "error" });
-                }
-                setSyncing(false);
-              }}
+    <>
+      <Card
+      // title={
+      //   <a
+      //     href={`${network.explorer}/address/${address}`}
+      //     target="_blank"
+      //     rel="noopener noreferrer"
+      //   >
+      //     <Text copyable={!balance.tag} style={{ width: "60%" }} ellipsis>
+      //       {balance.tag || address}
+      //     </Text>
+      //   </a>
+      // }
+      // extra={
+      //   <a
+      //     href={
+      //       token === AddressZero
+      //         ? `${network.explorer}/address/${address}`
+      //         : `${network.explorer}/token/${token}?a=${address}`
+      //     }
+      //     target="_blank"
+      //     rel="noopener noreferrer"
+      //   >
+      //     More
+      //   </a>
+      // }
+      // bordered={false}
+      // actions={[
+      //   <>
+      //     {syncing ? (
+      //       <LoadingOutlined />
+      //     ) : (
+      //       <SyncOutlined
+      //         key="sync"
+      //         onClick={async () => {
+      //           setSyncing(true);
+      //           try {
+      //             await dispatch(
+      //               fetchBalance({ getAccessTokenSilently, id: balance.id })
+      //             ).unwrap();
+      //             message.success("Query updated");
+      //           } catch (error) {
+      //             message.error(error as string);
+      //           }
+      //           setSyncing(false);
+      //         }}
+      //       />
+      //     )}
+      //   </>,
+      //   <DeleteOutlined
+      //     key="delete"
+      //     style={{ color: "red" }}
+      //     onClick={() => {
+      //       Modal.confirm({
+      //         title: "Are you sure delete this query?",
+      //         icon: <ExclamationCircleOutlined />,
+      //         content: "This will permanently delete this query.",
+      //         okText: "Yes",
+      //         okType: "danger",
+      //         cancelText: "No",
+      //         async onOk() {
+      //           try {
+      //             await dispatch(
+      //               deleteWallets({ getAccessTokenSilently, id: balance.id })
+      //             ).unwrap();
+      //             message.success("Query deleted");
+      //           } catch (error) {
+      //             message.error(error as string);
+      //           }
+      //         },
+      //       });
+      //     }}
+      //   />,
+      // ]}
+      >
+        <CardHeader
+          sx={{
+            "& .MuiCardHeader-content": {
+              overflow: "hidden",
+            },
+          }}
+          avatar={
+            <Avatar
+              sx={{ width: 32, height: 32 }}
+              src={
+                token === AddressZero
+                  ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                      .replace("-", "")
+                      .toLowerCase()}/info/logo.png`
+                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                      .replace("-", "")
+                      .toLowerCase()}/assets/${token}/logo.png`
+              }
             >
-              {syncing ? (
-                <CircularProgress color="inherit" size={24} />
-              ) : (
-                <RefreshIcon />
-              )}
-            </IconButton>
-          </Tooltip>
-        }
-      />
-      <CardContent>
-        <Tooltip title={copied ? "Copied" : "Copy address"}>
-          <Button
-            variant="text"
-            endIcon={
-              copied ? (
-                <DoneIcon color="primary" />
-              ) : (
-                <ContentCopyIcon color="action" />
-              )
-            }
-            onClick={handleCopy}
-            color="inherit"
-            disableElevation
-            style={{
-              maxWidth: "100%",
-              textTransform: "none",
-            }}
-          >
-            <Typography variant="body2" noWrap>
-              {address}
-            </Typography>
-          </Button>
-        </Tooltip>
-      </CardContent>
-      <CardActions>
-        <Tooltip title="View on block explorer">
-          <Link
-            color="inherit"
-            href={
-              token === AddressZero
-                ? `${network.explorer}/address/${address}`
-                : `${network.explorer}/token/${token}?a=${address}`
-            }
-            target="_blank"
-            rel="noreferrer"
-          >
-            <IconButton>
-              <OpenInNewIcon />
-            </IconButton>
-          </Link>
-        </Tooltip>
-        <Tooltip title="Delete this query" sx={{ ml: "auto" }}>
-          <IconButton
-            onClick={() => {
-              Modal.confirm({
-                title: "Are you sure delete this query?",
-                icon: <ExclamationCircleOutlined />,
-                content: "This will permanently delete this query.",
-                okText: "Yes",
-                okType: "danger",
-                cancelText: "No",
-                async onOk() {
+              <QuestionMarkIcon />
+            </Avatar>
+          }
+          title={
+            balance.balance
+              ? balance.balance + " " + balance.symbol
+              : "Cannot get balance"
+          }
+          titleTypographyProps={{
+            noWrap: true,
+          }}
+          subheader={balance.network}
+          subheaderTypographyProps={{ noWrap: true }}
+          action={
+            <Tooltip title="Refresh balance">
+              <IconButton
+                disabled={syncing}
+                onClick={async () => {
+                  setSyncing(true);
                   try {
                     await dispatch(
-                      deleteWallets({ getAccessTokenSilently, id: balance.id })
+                      fetchBalance({ getAccessTokenSilently, id: balance.id })
                     ).unwrap();
-                    enqueueSnackbar("Query deleted", { variant: "success" });
+                    enqueueSnackbar("Balance updated", { variant: "success" });
                   } catch (error) {
                     enqueueSnackbar(error as string, { variant: "error" });
                   }
-                },
-              });
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </CardActions>
-      {/* <Spin spinning={syncing}>
+                  setSyncing(false);
+                }}
+              >
+                {syncing ? (
+                  <CircularProgress color="inherit" size={24} />
+                ) : (
+                  <RefreshIcon />
+                )}
+              </IconButton>
+            </Tooltip>
+          }
+        />
+        <CardContent>
+          <Tooltip title={copied ? "Copied" : "Copy address"}>
+            <Button
+              variant="text"
+              endIcon={
+                copied ? (
+                  <DoneIcon color="primary" />
+                ) : (
+                  <ContentCopyIcon color="action" />
+                )
+              }
+              onClick={handleCopy}
+              color="inherit"
+              disableElevation
+              style={{
+                maxWidth: "100%",
+              }}
+            >
+              <Typography variant="body2" noWrap>
+                {address}
+              </Typography>
+            </Button>
+          </Tooltip>
+        </CardContent>
+        <CardActions>
+          <Tooltip title="View on block explorer">
+            <Link
+              color="inherit"
+              href={
+                token === AddressZero
+                  ? `${network.explorer}/address/${address}`
+                  : `${network.explorer}/token/${token}?a=${address}`
+              }
+              target="_blank"
+              rel="noreferrer"
+            >
+              <IconButton>
+                <OpenInNewIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Delete this query" sx={{ ml: "auto" }}>
+            <IconButton
+              // onClick={() => {
+              //   Modal.confirm({
+              //     title: "Are you sure delete this query?",
+              //     icon: <ExclamationCircleOutlined />,
+              //     content: "This will permanently delete this query.",
+              //     okText: "Yes",
+              //     okType: "danger",
+              //     cancelText: "No",
+              //     async onOk() {
+              //       try {
+              //         await dispatch(
+              //           deleteWallets({ getAccessTokenSilently, id: balance.id })
+              //         ).unwrap();
+              //         enqueueSnackbar("Query deleted", { variant: "success" });
+              //       } catch (error) {
+              //         enqueueSnackbar(error as string, { variant: "error" });
+              //       }
+              //     },
+              //   });
+              // }}
+              onClick={() => setOpen(true)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+        {/* <Spin spinning={syncing}>
         <Card.Meta
           avatar={
             <Avatar
@@ -292,7 +299,40 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           description={balance.network}
         />
       </Spin> */}
-    </Card>
+      </Card>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Are you sure delete this query?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You will not be able to fetch balance of this query again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={deleting} onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <LoadingButton
+            loading={deleting}
+            color="warning"
+            onClick={async () => {
+              setDeleting(true);
+              try {
+                await dispatch(
+                  deleteWallets({ getAccessTokenSilently, id: balance.id })
+                ).unwrap();
+                enqueueSnackbar("Query deleted", { variant: "success" });
+              } catch (error) {
+                enqueueSnackbar(error as string, { variant: "error" });
+              }
+              setDeleting(false);
+              setOpen(false);
+            }}
+          >
+            Delete
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
