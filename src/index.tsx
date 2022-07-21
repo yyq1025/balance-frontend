@@ -1,15 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
-import App from "./App";
-import NetworksView from "./views/NetworksView";
-import reportWebVitals from "./reportWebVitals";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import App from "./App";
 import store from "./app/store";
+import reportWebVitals from "./reportWebVitals";
+import theme from "./theme";
+import NetworksView from "./views/NetworksView";
 import QueriesView from "./views/QueriesView";
 
 const root = ReactDOM.createRoot(

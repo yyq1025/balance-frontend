@@ -1,12 +1,13 @@
 import {
-  createEntityAdapter,
   createAsyncThunk,
+  createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import type { Status, ErrorResponse } from "../../common/types";
+import type { ErrorResponse, Status } from "../../common/types";
 
 interface Network {
   chainId: string;

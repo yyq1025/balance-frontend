@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid, { GridProps } from "@mui/material/Grid";
-// import { useSnackbar } from "notistack";
+import React, { useEffect } from "react";
+
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import {
-  selectNetworkNames,
-  selectNetworksStatus,
-  selectNetworksError,
-  fetchNetworks,
-} from "./networksSlice";
 import Network from "./Network";
+import {
+  fetchNetworks,
+  selectNetworkNames,
+  selectNetworksError,
+  selectNetworksStatus,
+} from "./networksSlice";
 
 const Networks = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();

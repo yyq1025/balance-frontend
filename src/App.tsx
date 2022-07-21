@@ -1,34 +1,33 @@
-import React, { useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { SnackbarProvider, useSnackbar, SnackbarKey } from "notistack";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  ListItemButton,
-  Drawer,
-  Toolbar,
-  AppBar,
-  IconButton,
-  Typography,
-  Fab,
-  Alert,
-  AlertTitle,
-  CircularProgress,
-  useScrollTrigger,
-} from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import LoginIcon from "@mui/icons-material/Login";
+import MenuIcon from "@mui/icons-material/Menu";
 import PublicIcon from "@mui/icons-material/Public";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import LoginIcon from "@mui/icons-material/Login";
-import { useAuth0 } from "@auth0/auth0-react";
-import Navbar from "./features/Navbar";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import Fab from "@mui/material/Fab";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
+import React, { useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+
 import QueryButton from "./features/balances/QueryButton";
+import Navbar from "./features/Navbar";
 
 const drawerWidth = 240;
 

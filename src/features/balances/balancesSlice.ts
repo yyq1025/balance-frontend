@@ -1,10 +1,11 @@
+import { Auth0ContextInterface } from "@auth0/auth0-react";
 import {
-  createEntityAdapter,
   createAsyncThunk,
+  createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { Auth0ContextInterface } from "@auth0/auth0-react";
+
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
 import type { ErrorResponse, QueryForm, Status } from "../../common/types";

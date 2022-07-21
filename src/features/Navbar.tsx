@@ -1,17 +1,15 @@
-import React from "react";
-import {
-  Button,
-  Typography,
-  IconButton,
-  Avatar,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useAuth0 } from "@auth0/auth0-react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
+import React from "react";
 
 const Navbar = ({ title }: { title: string }) => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();

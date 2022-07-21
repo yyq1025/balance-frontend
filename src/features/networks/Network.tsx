@@ -1,26 +1,25 @@
-import React, { useState } from "react";
-import {
-  Avatar,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
-  Typography,
-  Tooltip,
-  IconButton,
-  Link,
-} from "@mui/material";
+import { MetaMaskInpageProvider } from "@metamask/providers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { useSnackbar } from "notistack";
-import copy from "clipboard-copy";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import type { EntityId } from "@reduxjs/toolkit";
+import copy from "clipboard-copy";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
+
 import { useAppSelector } from "../../common/hooks";
 import { selectNetworkByName } from "./networksSlice";
-import { MetaMaskInpageProvider } from "@metamask/providers";
 
 declare global {
   interface Window {

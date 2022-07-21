@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import balancesReducer from "../features/balances/balancesSlice";
 import networksReducer from "../features/networks/networksSlice";
 

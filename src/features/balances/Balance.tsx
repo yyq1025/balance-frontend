@@ -1,42 +1,41 @@
-import React, { useState } from "react";
-import {
-  Avatar,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
-  Typography,
-  IconButton,
-  CircularProgress,
-  Link,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import DoneIcon from "@mui/icons-material/Done";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import DeleteIcon from "@mui/icons-material/Delete";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import { useSnackbar } from "notistack";
-import copy from "clipboard-copy";
-import { getAddress } from "@ethersproject/address";
-import type { EntityId } from "@reduxjs/toolkit";
-import { AddressZero } from "@ethersproject/constants";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useAppSelector, useAppDispatch } from "../../common/hooks";
-import {
-  selectBalanceById,
-  fetchBalance,
-  deleteWallets,
-} from "./balancesSlice";
+import { getAddress } from "@ethersproject/address";
+import { AddressZero } from "@ethersproject/constants";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DoneIcon from "@mui/icons-material/Done";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import type { EntityId } from "@reduxjs/toolkit";
+import copy from "clipboard-copy";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { selectNetworkByName } from "../networks/networksSlice";
+import {
+  deleteWallets,
+  fetchBalance,
+  selectBalanceById,
+} from "./balancesSlice";
 
 const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();

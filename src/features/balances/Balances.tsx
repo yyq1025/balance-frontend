@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid, { GridProps } from "@mui/material/Grid";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useAppSelector, useAppDispatch } from "../../common/hooks";
+import React, { useEffect } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import Balance from "./Balance";
 import {
-  selectBalancesStatus,
-  selectBalancesError,
-  selectBalanceIds,
   fetchBalances,
+  selectBalanceIds,
+  selectBalancesError,
+  selectBalancesStatus,
 } from "./balancesSlice";
 import QueryButton from "./QueryButton";
-import Balance from "./Balance";
 
 const Balances = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();

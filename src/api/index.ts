@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import type { QueryForm } from "../common/types";
 
 const api = axios.create({

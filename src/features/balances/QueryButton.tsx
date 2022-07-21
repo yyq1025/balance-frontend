@@ -1,13 +1,14 @@
-import React, { useState, ReactNode } from "react";
-import Button from "@mui/material/Button";
-import { useSnackbar, SnackbarKey } from "notistack";
 import { useAuth0 } from "@auth0/auth0-react";
+import Button from "@mui/material/Button";
+import { SnackbarKey, useSnackbar } from "notistack";
+import React, { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import type { QueryForm } from "../../common/types";
 import { selectNetworksStatus } from "../networks/networksSlice";
 import { addBalance } from "./balancesSlice";
 import QueryCreateForm from "./QueryCreateForm";
-import type { QueryForm } from "../../common/types";
 
 interface QueryButtonProps {
   render: (RenderProps: {

@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  TextField,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { isAddress } from "@ethersproject/address";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
 import { useSnackbar } from "notistack";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { useAppSelector, useAppDispatch } from "../../common/hooks";
+import React, { useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import type { QueryForm } from "../../common/types";
 import {
+  fetchNetworks,
   selectNetworkNames,
   selectNetworksStatus,
-  fetchNetworks,
 } from "../networks/networksSlice";
-import { isAddress } from "@ethersproject/address";
-import type { QueryForm } from "../../common/types";
 
 interface QueryCreateFormProps {
   visible: boolean;
