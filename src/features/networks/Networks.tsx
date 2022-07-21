@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid, { GridProps } from "@mui/material/Grid";
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import {
   selectNetworkNames,
-  selectNetworksLoaded,
+  selectNetworksStatus,
+  selectNetworksError,
   fetchNetworks,
 } from "./networksSlice";
 import Network from "./Network";
@@ -12,26 +17,50 @@ import Network from "./Network";
 const Networks = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();
   const networkNames = useAppSelector(selectNetworkNames);
-  const loaded = useAppSelector(selectNetworksLoaded);
+  const status = useAppSelector(selectNetworksStatus);
+  const error = useAppSelector(selectNetworksError);
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchNetworks())
-        .unwrap()
-        .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
+    if (status === "idle") {
+      dispatch(fetchNetworks());
+      // .unwrap()
+      // .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 
   return (
-    <Grid {...props} container spacing={2}>
-      {networkNames.map((networkName) => (
-        <Grid item md={4} sm={6} xs={12} key={networkName}>
-          <Network networkName={networkName} />
+    <>
+      {status === "loading" && (
+        <CircularProgress
+          color="inherit"
+          sx={{ display: "block", mx: "auto" }}
+        />
+      )}
+      {status === "failed" && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" onClick={() => dispatch(fetchNetworks())}>
+              Retry
+            </Button>
+          }
+        >
+          <AlertTitle>Error</AlertTitle>
+          {error}
+        </Alert>
+      )}
+      {status === "succeeded" && (
+        <Grid {...props} container spacing={2}>
+          {networkNames.map((networkName) => (
+            <Grid item md={4} sm={6} xs={12} key={networkName}>
+              <Network networkName={networkName} />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      )}
+    </>
   );
 };
 

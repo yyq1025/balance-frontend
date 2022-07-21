@@ -74,7 +74,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
 
   return (
     <>
-      <Card>
+      <Card variant="outlined">
         <CardHeader
           sx={{
             "& .MuiCardHeader-content": {

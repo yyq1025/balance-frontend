@@ -14,11 +14,15 @@ import {
   AppBar,
   IconButton,
   Typography,
+  Fab,
 } from "@mui/material";
 import PublicIcon from "@mui/icons-material/Public";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import LoginIcon from "@mui/icons-material/Login";
+import { useAuth0 } from "@auth0/auth0-react";
 import Navbar from "./features/Navbar";
 import QueryButton from "./features/balances/QueryButton";
 
@@ -41,6 +45,8 @@ const SnackbarCloseButton = ({ snackbarkey }: { snackbarkey: SnackbarKey }) => {
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { isAuthenticated, loginWithRedirect, user } = useAuth0();
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -150,7 +156,30 @@ const App = () => {
           >
             {drawer}
             <Box sx={{ m: 2 }}>
-              <QueryButton variant="extended" color="primary" />
+              <QueryButton
+                render={(disabled, onClick) => (
+                  <Fab
+                    variant="extended"
+                    color="primary"
+                    disabled={
+                      isAuthenticated && (!user?.email_verified || disabled)
+                    }
+                    onClick={isAuthenticated ? onClick : loginWithRedirect}
+                  >
+                    {isAuthenticated ? (
+                      <>
+                        <AddIcon sx={{ mr: 1 }} />
+                        Add query
+                      </>
+                    ) : (
+                      <>
+                        <LoginIcon sx={{ mr: 1 }} />
+                        Login
+                      </>
+                    )}
+                  </Fab>
+                )}
+              />
             </Box>
           </Drawer>
         </Box>
@@ -165,14 +194,34 @@ const App = () => {
           <Outlet />
         </Box>
         <QueryButton
-          variant="extended"
-          color="primary"
-          sx={{
-            position: "fixed",
-            bottom: 16,
-            right: 16,
-            display: { sm: "none" },
-          }}
+          render={(disabled, onClick) => (
+            <Fab
+              variant="extended"
+              color="primary"
+              disabled={isAuthenticated && (!user?.email_verified || disabled)}
+              onClick={isAuthenticated ? onClick : loginWithRedirect}
+              sx={{
+                position: "fixed",
+                bottom: 16,
+                right: 16,
+                display: { sm: "none" },
+              }}
+            >
+              {isAuthenticated ? (
+                <>
+                  <AddIcon sx={{ mr: 1 }} />
+                  Add query
+                </>
+              ) : (
+                <>
+                  <LoginIcon sx={{ mr: 1 }} />
+                  Login
+                </>
+              )}
+            </Fab>
+          )}
+          // variant="extended"
+          // color="primary"
         />
       </SnackbarProvider>
     </Box>

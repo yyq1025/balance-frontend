@@ -14,7 +14,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
   selectNetworkNames,
-  selectNetworksLoaded,
+  selectNetworksStatus,
   fetchNetworks,
 } from "../networks/networksSlice";
 import { isAddress } from "@ethersproject/address";
@@ -32,7 +32,7 @@ const QueryCreateForm = ({
   onCancel,
 }: QueryCreateFormProps) => {
   const dispatch = useAppDispatch();
-  const networksLoaded = useAppSelector(selectNetworksLoaded);
+  const networksStatus = useAppSelector(selectNetworksStatus);
   const networkNames = useAppSelector(selectNetworkNames);
 
   const [submitting, setSubmitting] = useState(false);
@@ -62,10 +62,10 @@ const QueryCreateForm = ({
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (!networksLoaded) {
-      dispatch(fetchNetworks())
-        .unwrap()
-        .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
+    if (networksStatus === "idle") {
+      dispatch(fetchNetworks());
+      // .unwrap()
+      // .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 

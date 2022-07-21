@@ -97,7 +97,7 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   };
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader
         avatar={
           <Avatar

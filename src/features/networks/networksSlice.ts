@@ -6,7 +6,7 @@ import {
 import { AxiosError } from "axios";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import type { ErrorResponse } from "../../common/types";
+import type { Status, ErrorResponse } from "../../common/types";
 
 interface Network {
   chainId: string;
@@ -20,8 +20,9 @@ const networksAdapter = createEntityAdapter<Network>({
   selectId: (network) => network.name,
 });
 
-const initialState = networksAdapter.getInitialState({
-  loaded: false,
+const initialState = networksAdapter.getInitialState<Status>({
+  status: "idle",
+  error: null,
 });
 
 export const fetchNetworks = createAsyncThunk<
@@ -49,10 +50,18 @@ export const networksSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchNetworks.fulfilled, (state, action) => {
-      networksAdapter.setAll(state, action.payload);
-      state.loaded = true;
-    });
+    builder
+      .addCase(fetchNetworks.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchNetworks.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        networksAdapter.setAll(state, action.payload);
+      })
+      .addCase(fetchNetworks.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || null;
+      });
   },
 });
 
@@ -61,6 +70,7 @@ export const {
   selectById: selectNetworkByName,
 } = networksAdapter.getSelectors((state: RootState) => state.networks);
 
-export const selectNetworksLoaded = (state: RootState) => state.networks.loaded;
+export const selectNetworksStatus = (state: RootState) => state.networks.status;
+export const selectNetworksError = (state: RootState) => state.networks.error;
 
 export default networksSlice.reducer;

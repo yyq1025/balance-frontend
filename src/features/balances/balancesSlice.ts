@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import { Auth0ContextInterface } from "@auth0/auth0-react";
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import type { ErrorResponse, QueryForm } from "../../common/types";
+import type { ErrorResponse, QueryForm, Status } from "../../common/types";
 
 interface Balance {
   id: number;
@@ -25,8 +25,9 @@ export const balancesAdapter = createEntityAdapter<Balance>({
   sortComparer: (a, b) => a.id - b.id,
 });
 
-const initialState = balancesAdapter.getInitialState({
-  loaded: false,
+const initialState = balancesAdapter.getInitialState<Status>({
+  status: "idle",
+  error: null,
 });
 
 export const fetchBalances = createAsyncThunk<
@@ -125,9 +126,16 @@ export const balanecsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchBalances.pending, (state) => {
+        state.status = "loading";
+      })
       .addCase(fetchBalances.fulfilled, (state, action) => {
+        state.status = "succeeded";
         balancesAdapter.setAll(state, action.payload);
-        state.loaded = true;
+      })
+      .addCase(fetchBalances.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || null;
       })
       .addCase(addBalance.fulfilled, (state, action) => {
         balancesAdapter.addOne(state, action.payload);
@@ -146,6 +154,7 @@ export const { resetWallets } = balanecsSlice.actions;
 export const { selectIds: selectBalanceIds, selectById: selectBalanceById } =
   balancesAdapter.getSelectors((state: RootState) => state.balances);
 
-export const selectBalancesLoaded = (state: RootState) => state.balances.loaded;
+export const selectBalancesStatus = (state: RootState) => state.balances.status;
+export const selectBalancesError = (state: RootState) => state.balances.error;
 
 export default balanecsSlice.reducer;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import Fab, { FabProps } from "@mui/material/Fab";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,12 +7,18 @@ import { useSnackbar, SnackbarKey } from "notistack";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { selectNetworksStatus } from "../networks/networksSlice";
 import { addBalance } from "./balancesSlice";
 import QueryCreateForm from "./QueryCreateForm";
 import type { QueryForm } from "../../common/types";
 
-const QueryButton = ({ ...props }: FabProps) => {
+interface QueryButtonProps {
+  render: (disabled: boolean, onClick: () => void) => ReactElement;
+}
+
+const QueryButton = ({ render }: QueryButtonProps) => {
   const dispatch = useAppDispatch();
+  const networksStatus = useAppSelector(selectNetworksStatus);
   const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } =
     useAuth0();
   const [visible, setVisible] = useState(false);
@@ -42,9 +48,12 @@ const QueryButton = ({ ...props }: FabProps) => {
 
   return (
     <>
-      <Fab
+      {/* <Fab
         {...props}
-        disabled={isAuthenticated && !user?.email_verified}
+        disabled={
+          isAuthenticated &&
+          (!user?.email_verified || networksStatus !== "succeeded")
+        }
         onClick={() =>
           isAuthenticated ? setVisible(true) : loginWithRedirect()
         }
@@ -60,7 +69,8 @@ const QueryButton = ({ ...props }: FabProps) => {
             Login
           </>
         )}
-      </Fab>
+      </Fab> */}
+      {render(networksStatus !== "succeeded", () => setVisible(true))}
       <QueryCreateForm
         visible={visible}
         onCreate={onCreate}
