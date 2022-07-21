@@ -4,7 +4,6 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid, { GridProps } from "@mui/material/Grid";
-import { useSnackbar } from "notistack";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector, useAppDispatch } from "../../common/hooks";
 import {
@@ -23,13 +22,9 @@ const Balances = ({ ...props }: GridProps) => {
   const status = useAppSelector(selectBalancesStatus);
   const error = useAppSelector(selectBalancesError);
 
-  // const { enqueueSnackbar } = useSnackbar();
-
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchBalances({ getAccessTokenSilently }));
-      // .unwrap()
-      // .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 
@@ -73,7 +68,7 @@ const Balances = ({ ...props }: GridProps) => {
             severity="success"
             action={
               <QueryButton
-                render={(disabled, onClick) => (
+                render={({ disabled, onClick }) => (
                   <Button color="inherit" onClick={onClick} disabled={disabled}>
                     Add query
                   </Button>

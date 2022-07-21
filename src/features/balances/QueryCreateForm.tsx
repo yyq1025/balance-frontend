@@ -64,8 +64,6 @@ const QueryCreateForm = ({
   useEffect(() => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
-      // .unwrap()
-      // .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 
@@ -73,7 +71,6 @@ const QueryCreateForm = ({
     if (isSubmitSuccessful) {
       reset({ address: "", network: "Ethereum", token: "" });
       onCancel();
-      // navigate("/wallets");
     }
   }, [isSubmitSuccessful]);
 

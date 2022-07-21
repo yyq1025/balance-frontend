@@ -20,13 +20,9 @@ const Networks = ({ ...props }: GridProps) => {
   const status = useAppSelector(selectNetworksStatus);
   const error = useAppSelector(selectNetworksError);
 
-  // const { enqueueSnackbar } = useSnackbar();
-
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchNetworks());
-      // .unwrap()
-      // .catch((error: string) => enqueueSnackbar(error, { variant: "error" }));
     }
   }, []);
 

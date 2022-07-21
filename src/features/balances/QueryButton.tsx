@@ -1,8 +1,5 @@
-import React, { useState, ReactElement } from "react";
-import Fab, { FabProps } from "@mui/material/Fab";
+import React, { useState, ReactNode } from "react";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import LoginIcon from "@mui/icons-material/Login";
 import { useSnackbar, SnackbarKey } from "notistack";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
@@ -13,14 +10,16 @@ import QueryCreateForm from "./QueryCreateForm";
 import type { QueryForm } from "../../common/types";
 
 interface QueryButtonProps {
-  render: (disabled: boolean, onClick: () => void) => ReactElement;
+  render: (RenderProps: {
+    disabled: boolean;
+    onClick: () => void;
+  }) => ReactNode;
 }
 
 const QueryButton = ({ render }: QueryButtonProps) => {
   const dispatch = useAppDispatch();
   const networksStatus = useAppSelector(selectNetworksStatus);
-  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } =
-    useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
   const [visible, setVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -46,31 +45,12 @@ const QueryButton = ({ render }: QueryButtonProps) => {
     setVisible(false);
   };
 
+  const disabled = networksStatus !== "succeeded" || !user?.email_verified;
+  const onClick = () => setVisible(true);
+
   return (
     <>
-      {/* <Fab
-        {...props}
-        disabled={
-          isAuthenticated &&
-          (!user?.email_verified || networksStatus !== "succeeded")
-        }
-        onClick={() =>
-          isAuthenticated ? setVisible(true) : loginWithRedirect()
-        }
-      >
-        {isAuthenticated ? (
-          <>
-            <AddIcon sx={{ mr: 1 }} />
-            Add query
-          </>
-        ) : (
-          <>
-            <LoginIcon sx={{ mr: 1 }} />
-            Login
-          </>
-        )}
-      </Fab> */}
-      {render(networksStatus !== "succeeded", () => setVisible(true))}
+      {render({ disabled, onClick })}
       <QueryCreateForm
         visible={visible}
         onCreate={onCreate}

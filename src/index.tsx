@@ -2,10 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, makeStyles } from "@mui/material/styles";
-import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import App from "./App";
 import NetworksView from "./views/NetworksView";
@@ -28,14 +26,6 @@ root.render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {/* <Box
-            sx={{
-              "& .SnackbarContainer-bottom": {
-                bottom: "72px !important",
-              },
-            }}
-          >
-            <SnackbarProvider maxSnack={3}> */}
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<App />}>
@@ -44,8 +34,6 @@ root.render(
               </Route>
             </Routes>
           </BrowserRouter>
-          {/* </SnackbarProvider>
-          </Box> */}
         </ThemeProvider>
       </Provider>
     </Auth0Provider>
