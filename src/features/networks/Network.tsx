@@ -115,9 +115,9 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
               value={parseInt(network.chainId, 16).toString()}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <CopyableRow label="Currency Symbol" value={network.symbol} />
-          </Grid>
+          </Grid> */}
         </Grid>
       </CardContent>
       <CardActions>
