@@ -1,6 +1,7 @@
 import { Auth0Provider } from "@auth0/auth0-react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import { SnackbarKey, SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -8,6 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import App from "./App";
 import store from "./app/store";
+import SnackbarCloseButton from "./features/SnackbarCloseButton";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import NetworksView from "./views/NetworksView";
@@ -16,6 +18,7 @@ import QueriesView from "./views/QueriesView";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Auth0Provider
@@ -27,14 +30,26 @@ root.render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<App />}>
-                <Route index element={<NetworksView maxWidth="lg" />} />
-                <Route path="queries" element={<QueriesView maxWidth="lg" />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <SnackbarProvider
+            action={(snackbarId: SnackbarKey) => (
+              <SnackbarCloseButton snackbarkey={snackbarId} />
+            )}
+          >
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route
+                    index
+                    element={<NetworksView maxWidth="lg" sx={{ py: 2 }} />}
+                  />
+                  <Route
+                    path="queries"
+                    element={<QueriesView maxWidth="lg" sx={{ py: 2 }} />}
+                  />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </SnackbarProvider>
         </ThemeProvider>
       </Provider>
     </Auth0Provider>

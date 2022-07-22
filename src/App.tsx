@@ -1,6 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import LoginIcon from "@mui/icons-material/Login";
 import MenuIcon from "@mui/icons-material/Menu";
 import PublicIcon from "@mui/icons-material/Public";
@@ -22,28 +21,13 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import QueryButton from "./features/balances/QueryButton";
 import UserButton from "./features/UserButton";
 
 const drawerWidth = 240;
-
-const SnackbarCloseButton = ({ snackbarkey }: { snackbarkey: SnackbarKey }) => {
-  const { closeSnackbar } = useSnackbar();
-  return (
-    <IconButton
-      color="inherit"
-      onClick={() => {
-        closeSnackbar(snackbarkey);
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-  );
-};
 
 const App = () => {
   const location = useLocation();
@@ -61,6 +45,10 @@ const App = () => {
     disableHysteresis: true,
     threshold: 0,
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   const drawer = (
     <>
@@ -100,9 +88,6 @@ const App = () => {
       sx={{
         display: "flex",
         minHeight: "100vh",
-        "& .SnackbarContainer-bottom": {
-          bottom: { xs: "72px !important", md: "14px !important" },
-        },
       }}
     >
       {error ? (
@@ -116,11 +101,7 @@ const App = () => {
           sx={{ display: "block", m: "auto" }}
         />
       ) : (
-        <SnackbarProvider
-          action={(snackbarId: SnackbarKey) => (
-            <SnackbarCloseButton snackbarkey={snackbarId} />
-          )}
-        >
+        <>
           <AppBar
             position="fixed"
             color="inherit"
@@ -249,7 +230,7 @@ const App = () => {
               Login
             </Fab>
           )}
-        </SnackbarProvider>
+        </>
       )}
     </Box>
   );

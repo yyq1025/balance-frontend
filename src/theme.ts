@@ -19,6 +19,15 @@ const theme = createTheme({
       textTransform: "none",
     },
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: (theme) => ({
+        [theme.breakpoints.down("sm")]: {
+          ".SnackbarContainer-bottom": { bottom: "72px !important" },
+        },
+      }),
+    },
+  },
 });
 
 export default theme;

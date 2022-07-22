@@ -1,9 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { getAddress } from "@ethersproject/address";
 import { AddressZero } from "@ethersproject/constants";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DoneIcon from "@mui/icons-material/Done";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -20,16 +18,17 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { EntityId } from "@reduxjs/toolkit";
-import copy from "clipboard-copy";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import CopyableRow from "../CopyableRow";
 import { selectNetworkByName } from "../networks/networksSlice";
 import {
   deleteWallets,
@@ -41,7 +40,6 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const dispatch = useAppDispatch();
   const { getAccessTokenSilently } = useAuth0();
   const [syncing, setSyncing] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -63,13 +61,6 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
 
   const address = getAddress(balance.address);
   const token = getAddress(balance.token);
-
-  const handleCopy = () => {
-    setCopied(true);
-    copy(address).then(() => {
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
 
   return (
     <>
@@ -100,7 +91,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               <Tooltip
                 title={`${balance.balance} ${balance.symbol} @ ${balance.network}`}
               >
-                <Typography variant="body2" noWrap>
+                <Typography variant="subtitle2" noWrap>
                   {`${balance.balance} ${balance.symbol}`}
                 </Typography>
               </Tooltip>
@@ -139,28 +130,17 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           }
         />
         <CardContent>
-          <Tooltip title={copied ? "Copied" : "Copy address"}>
-            <Button
-              variant="text"
-              endIcon={
-                copied ? (
-                  <DoneIcon color="primary" />
-                ) : (
-                  <ContentCopyIcon color="action" />
-                )
-              }
-              onClick={handleCopy}
-              color="inherit"
-              disableElevation
-              style={{
-                maxWidth: "100%",
-              }}
-            >
-              <Typography variant="body2" noWrap>
-                {address}
-              </Typography>
-            </Button>
-          </Tooltip>
+          <Grid container rowSpacing={3}>
+            <Grid item xs={12}>
+              <CopyableRow label="Address" value={address} />
+            </Grid>
+            <Grid item xs={12}>
+              <CopyableRow
+                label="Token"
+                value={token === AddressZero ? balance.symbol : token}
+              />
+            </Grid>
+          </Grid>
         </CardContent>
         <CardActions>
           <Tooltip title="View on block explorer">

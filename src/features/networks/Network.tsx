@@ -1,24 +1,21 @@
 import { MetaMaskInpageProvider } from "@metamask/providers";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneIcon from "@mui/icons-material/Done";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import type { EntityId } from "@reduxjs/toolkit";
-import copy from "clipboard-copy";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React from "react";
 
 import { useAppSelector } from "../../common/hooks";
+import CopyableRow from "../CopyableRow";
 import { selectNetworkByName } from "./networksSlice";
 
 declare global {
@@ -38,20 +35,11 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
     selectNetworkByName(state, networkName)
   );
 
-  const [copied, setCopied] = useState(false);
-
   const { enqueueSnackbar } = useSnackbar();
 
   if (!network) {
     return null;
   }
-
-  const handleCopy = () => {
-    setCopied(true);
-    copy(network.url).then(() => {
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
 
   const { ethereum } = window;
 
@@ -117,28 +105,20 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
         }
       />
       <CardContent>
-        <Tooltip title={copied ? "Copied" : "Copy RPC URL"}>
-          <Button
-            variant="text"
-            endIcon={
-              copied ? (
-                <DoneIcon color="primary" />
-              ) : (
-                <ContentCopyIcon color="action" />
-              )
-            }
-            onClick={handleCopy}
-            color="inherit"
-            disableElevation
-            style={{
-              maxWidth: "100%",
-            }}
-          >
-            <Typography variant="body2" color="text.secondary" noWrap>
-              {network.url}
-            </Typography>
-          </Button>
-        </Tooltip>
+        <Grid container rowSpacing={3}>
+          <Grid item xs={12}>
+            <CopyableRow label="RPC URL" value={network.url} />
+          </Grid>
+          <Grid item xs={12}>
+            <CopyableRow
+              label="Chain ID"
+              value={parseInt(network.chainId, 16).toString()}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <CopyableRow label="Currency Symbol" value={network.symbol} />
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions>
         <Tooltip title={`Switch to ${network.name}`}>
@@ -146,18 +126,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
             <SwapHorizIcon />
           </IconButton>
         </Tooltip>
-        {/* <Tooltip title="Open block explorer">
-          <Link
-            href={network.explorer}
-            target="_blank"
-            rel="noreferrer"
-            color="inherit"
-          >
-            <IconButton>
-              <OpenInNewIcon />
-            </IconButton>
-          </Link>
-        </Tooltip> */}
       </CardActions>
     </Card>
   );
