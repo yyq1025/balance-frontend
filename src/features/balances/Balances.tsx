@@ -59,7 +59,7 @@ const Balances = ({ ...props }: GridProps) => {
         (balanceIds.length > 0 ? (
           <Grid {...props} container spacing={2}>
             {balanceIds.map((balanceId) => (
-              <Grid item md={4} sm={6} xs={12} key={balanceId}>
+              <Grid item lg={4} sm={6} xs={12} key={balanceId}>
                 <Balance balanceId={balanceId} />
               </Grid>
             ))}
@@ -69,8 +69,8 @@ const Balances = ({ ...props }: GridProps) => {
             severity="success"
             action={
               <QueryButton
-                render={({ disabled, onClick }) => (
-                  <Button color="inherit" onClick={onClick} disabled={disabled}>
+                render={(params) => (
+                  <Button {...params} color="inherit">
                     Add query
                   </Button>
                 )}

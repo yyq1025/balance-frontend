@@ -98,13 +98,23 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
   return (
     <Card variant="outlined">
       <CardHeader
-        avatar={
-          <Avatar
-            src={`/assets/${network.name}.svg`}
-            sx={{ width: 32, height: 32 }}
-          />
+        avatar={<Avatar src={`/assets/${network.name}.svg`} />}
+        title={network.name}
+        titleTypographyProps={{ variant: "subtitle1" }}
+        action={
+          <Tooltip title="Open block explorer">
+            <Link
+              href={network.explorer}
+              target="_blank"
+              rel="noreferrer"
+              color="inherit"
+            >
+              <IconButton>
+                <OpenInNewIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
         }
-        title={<Typography variant="subtitle1">{network.name}</Typography>}
       />
       <CardContent>
         <Tooltip title={copied ? "Copied" : "Copy RPC URL"}>
@@ -136,7 +146,7 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
             <SwapHorizIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Open block explorer">
+        {/* <Tooltip title="Open block explorer">
           <Link
             href={network.explorer}
             target="_blank"
@@ -147,7 +157,7 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
               <OpenInNewIcon />
             </IconButton>
           </Link>
-        </Tooltip>
+        </Tooltip> */}
       </CardActions>
     </Card>
   );

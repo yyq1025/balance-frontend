@@ -82,7 +82,6 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
           }}
           avatar={
             <Avatar
-              sx={{ width: 32, height: 32 }}
               src={
                 token === AddressZero
                   ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network

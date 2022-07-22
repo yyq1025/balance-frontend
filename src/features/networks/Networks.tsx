@@ -50,7 +50,7 @@ const Networks = ({ ...props }: GridProps) => {
       {status === "succeeded" && (
         <Grid {...props} container spacing={2}>
           {networkNames.map((networkName) => (
-            <Grid item md={4} sm={6} xs={12} key={networkName}>
+            <Grid item lg={4} sm={6} xs={12} key={networkName}>
               <Network networkName={networkName} />
             </Grid>
           ))}

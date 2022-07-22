@@ -8,10 +8,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
 import React from "react";
 
-const Navbar = ({ title }: { title: string }) => {
+const UserButton = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const logoutWithRedirect = () => {
     logout({
@@ -30,12 +29,6 @@ const Navbar = ({ title }: { title: string }) => {
 
   return (
     <>
-      <Typography
-        variant="h6"
-        sx={{ flexGrow: 1, textTransform: "capitalize" }}
-      >
-        {title}
-      </Typography>
       {isAuthenticated ? (
         <>
           <IconButton onClick={handleClick}>
@@ -63,4 +56,4 @@ const Navbar = ({ title }: { title: string }) => {
   );
 };
 
-export default Navbar;
+export default UserButton;

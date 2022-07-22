@@ -27,7 +27,7 @@ import React, { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import QueryButton from "./features/balances/QueryButton";
-import Navbar from "./features/Navbar";
+import UserButton from "./features/UserButton";
 
 const drawerWidth = 240;
 
@@ -101,7 +101,7 @@ const App = () => {
         display: "flex",
         minHeight: "100vh",
         "& .SnackbarContainer-bottom": {
-          bottom: { xs: "72px !important", sm: "14px !important" },
+          bottom: { xs: "72px !important", md: "14px !important" },
         },
       }}
     >
@@ -126,8 +126,8 @@ const App = () => {
             color="inherit"
             elevation={trigger ? 4 : 0}
             sx={{
-              width: { sm: `calc(100% - ${drawerWidth}px)` },
-              ml: { sm: `${drawerWidth}px` },
+              width: { md: `calc(100% - ${drawerWidth}px)` },
+              ml: { md: `${drawerWidth}px` },
             }}
           >
             <Toolbar>
@@ -135,16 +135,22 @@ const App = () => {
                 color="inherit"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: "none" } }}
+                sx={{ mr: 2, display: { md: "none" } }}
               >
                 <MenuIcon />
               </IconButton>
-              <Navbar title={location.pathname.substring(1) || "networks"} />
+              <Typography
+                variant="h6"
+                sx={{ flexGrow: 1, textTransform: "capitalize" }}
+              >
+                {location.pathname.substring(1) || "networks"}
+              </Typography>
+              <UserButton />
             </Toolbar>
           </AppBar>
           <Box
             component="nav"
-            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+            sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
           >
             <Drawer
               variant="temporary"
@@ -154,7 +160,7 @@ const App = () => {
                 keepMounted: true,
               }}
               sx={{
-                display: { xs: "block", sm: "none" },
+                display: { xs: "block", md: "none" },
                 "& .MuiDrawer-paper": {
                   boxSizing: "border-box",
                   width: drawerWidth,
@@ -166,7 +172,7 @@ const App = () => {
             <Drawer
               variant="permanent"
               sx={{
-                display: { xs: "none", sm: "block" },
+                display: { xs: "none", md: "block" },
                 "& .MuiDrawer-paper": {
                   boxSizing: "border-box",
                   width: drawerWidth,
@@ -178,13 +184,8 @@ const App = () => {
               <Box sx={{ m: 2 }}>
                 {isAuthenticated ? (
                   <QueryButton
-                    render={({ disabled, onClick }) => (
-                      <Fab
-                        color="primary"
-                        variant="extended"
-                        onClick={onClick}
-                        disabled={disabled}
-                      >
+                    render={(params) => (
+                      <Fab {...params} color="primary" variant="extended">
                         <AddIcon sx={{ mr: 1 }} />
                         Add query
                       </Fab>
@@ -207,7 +208,7 @@ const App = () => {
             component="main"
             sx={{
               flexGrow: 1,
-              width: { sm: `calc(100% - ${drawerWidth}px)`, xs: "100%" },
+              width: { md: `calc(100% - ${drawerWidth}px)`, xs: "100%" },
             }}
           >
             <Toolbar />
@@ -215,17 +216,16 @@ const App = () => {
           </Box>
           {isAuthenticated ? (
             <QueryButton
-              render={({ disabled, onClick }) => (
+              render={(params) => (
                 <Fab
+                  {...params}
                   color="primary"
                   variant="extended"
-                  onClick={onClick}
-                  disabled={disabled}
                   sx={{
                     position: "fixed",
                     bottom: 16,
                     right: 16,
-                    display: { sm: "none" },
+                    display: { md: "none" },
                   }}
                 >
                   <AddIcon sx={{ mr: 1 }} />
@@ -242,7 +242,7 @@ const App = () => {
                 position: "fixed",
                 bottom: 16,
                 right: 16,
-                display: { sm: "none" },
+                display: { md: "none" },
               }}
             >
               <LoginIcon sx={{ mr: 1 }} />

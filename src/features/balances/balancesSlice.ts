@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import type { ErrorResponse, QueryForm, Status } from "../../common/types";
+import { ErrorResponse, QueryForm, Status } from "../../common/types";
 
 interface Balance {
   id: number;

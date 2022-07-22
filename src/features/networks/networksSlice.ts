@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import type { ErrorResponse, Status } from "../../common/types";
+import { ErrorResponse, Status } from "../../common/types";
 
 interface Network {
   chainId: string;

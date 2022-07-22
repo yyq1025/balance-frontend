@@ -30,8 +30,8 @@ root.render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<App />}>
-                <Route index element={<NetworksView maxWidth="md" />} />
-                <Route path="queries" element={<QueriesView maxWidth="md" />} />
+                <Route index element={<NetworksView maxWidth="lg" />} />
+                <Route path="queries" element={<QueriesView maxWidth="lg" />} />
               </Route>
             </Routes>
           </BrowserRouter>
