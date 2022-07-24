@@ -28,6 +28,7 @@ import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { ErrorMessage } from "../../common/types";
 import CopyableRow from "../CopyableRow";
 import { selectNetworkByName } from "../networks/networksSlice";
 import {
@@ -108,14 +109,17 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
                 onClick={async () => {
                   setSyncing(true);
                   try {
+                    const token = await getAccessTokenSilently();
                     await dispatch(
-                      fetchBalance({ getAccessTokenSilently, id: balance.id })
+                      fetchBalance({ token, id: balance.id })
                     ).unwrap();
                     enqueueSnackbar("Balance updated", {
                       variant: "success",
                     });
                   } catch (error) {
-                    enqueueSnackbar(error as string, { variant: "error" });
+                    enqueueSnackbar((error as ErrorMessage).message, {
+                      variant: "error",
+                    });
                   }
                   setSyncing(false);
                 }}
@@ -183,12 +187,15 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             onClick={async () => {
               setDeleting(true);
               try {
+                const token = await getAccessTokenSilently();
                 await dispatch(
-                  deleteWallets({ getAccessTokenSilently, id: balance.id })
+                  deleteWallets({ token, id: balance.id })
                 ).unwrap();
                 enqueueSnackbar("Query deleted", { variant: "success" });
               } catch (error) {
-                enqueueSnackbar(error as string, { variant: "error" });
+                enqueueSnackbar((error as ErrorMessage).message, {
+                  variant: "error",
+                });
               }
               setDeleting(false);
               setOpen(false);

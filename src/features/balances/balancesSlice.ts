@@ -1,4 +1,3 @@
-import { Auth0ContextInterface } from "@auth0/auth0-react";
 import {
   createAsyncThunk,
   createEntityAdapter,
@@ -37,9 +36,6 @@ interface DeleteResponse {
   ids: number[];
 }
 
-type GetAccessTokenSilentlyType =
-  Auth0ContextInterface["getAccessTokenSilently"];
-
 export const balancesAdapter = createEntityAdapter<Balance>({
   sortComparer: (a, b) => b.id - a.id,
 });
@@ -51,13 +47,12 @@ const initialState = balancesAdapter.getInitialState<Status>({
 
 export const fetchBalances = createAsyncThunk<
   BalancesResponse,
-  { getAccessTokenSilently: GetAccessTokenSilentlyType },
+  { token: string },
   { state: RootState; rejectValue: ErrorMessage }
 >(
   "balances/fetchBalances",
-  async ({ getAccessTokenSilently }, { getState, rejectWithValue }) => {
+  async ({ token }, { getState, rejectWithValue }) => {
     try {
-      const token = await getAccessTokenSilently();
       const response = await api.fetchBalances(token, getState().balances.next);
       return response.data;
     } catch (error) {
@@ -74,69 +69,57 @@ export const fetchBalances = createAsyncThunk<
 
 export const addBalance = createAsyncThunk<
   BalanceResponse,
-  { getAccessTokenSilently: GetAccessTokenSilentlyType; values: QueryForm },
+  { token: string; values: QueryForm },
   { rejectValue: ErrorMessage }
->(
-  "balances/addBalance",
-  async ({ getAccessTokenSilently, values }, { rejectWithValue }) => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await api.createWallet(token, values);
-      return response.data;
-    } catch (error) {
-      const err = error as AxiosError<ErrorMessage>;
-      if (err.response?.data) {
-        return rejectWithValue(err.response.data);
-      } else {
-        return rejectWithValue({ message: err.message });
-      }
+>("balances/addBalance", async ({ token, values }, { rejectWithValue }) => {
+  try {
+    const response = await api.createWallet(token, values);
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ErrorMessage>;
+    if (err.response?.data) {
+      return rejectWithValue(err.response.data);
+    } else {
+      return rejectWithValue({ message: err.message });
     }
   }
-);
+});
 
 export const fetchBalance = createAsyncThunk<
   BalanceResponse,
-  { getAccessTokenSilently: GetAccessTokenSilentlyType; id: number },
+  { token: string; id: number },
   { rejectValue: ErrorMessage }
->(
-  "balances/fetchBalance",
-  async ({ getAccessTokenSilently, id }, { rejectWithValue }) => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await api.fetchBalance(token, id);
-      return response.data;
-    } catch (error) {
-      const err = error as AxiosError<ErrorMessage>;
-      if (err.response?.data) {
-        return rejectWithValue(err.response.data);
-      } else {
-        return rejectWithValue({ message: err.message });
-      }
+>("balances/fetchBalance", async ({ token, id }, { rejectWithValue }) => {
+  try {
+    const response = await api.fetchBalance(token, id);
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ErrorMessage>;
+    if (err.response?.data) {
+      return rejectWithValue(err.response.data);
+    } else {
+      return rejectWithValue({ message: err.message });
     }
   }
-);
+});
 
 export const deleteWallets = createAsyncThunk<
   DeleteResponse,
-  { getAccessTokenSilently: GetAccessTokenSilentlyType; id: number },
+  { token: string; id: number },
   { rejectValue: ErrorMessage }
->(
-  "balances/deleteBalances",
-  async ({ getAccessTokenSilently, id }, { rejectWithValue }) => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await api.deleteWallet(token, id);
-      return response.data;
-    } catch (error) {
-      const err = error as AxiosError<ErrorMessage>;
-      if (err.response?.data) {
-        return rejectWithValue(err.response.data);
-      } else {
-        return rejectWithValue({ message: err.message });
-      }
+>("balances/deleteBalances", async ({ token, id }, { rejectWithValue }) => {
+  try {
+    const response = await api.deleteWallet(token, id);
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ErrorMessage>;
+    if (err.response?.data) {
+      return rejectWithValue(err.response.data);
+    } else {
+      return rejectWithValue({ message: err.message });
     }
   }
-);
+});
 
 export const balanecsSlice = createSlice({
   name: "balanecs",

@@ -15,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { QueryForm } from "../../common/types";
+import { ErrorMessage, QueryForm } from "../../common/types";
 import {
   fetchNetworks,
   selectNetworkNames,
@@ -69,11 +69,12 @@ const QueryButton = ({ render }: QueryButtonProps) => {
   const onSubmit: SubmitHandler<QueryForm> = async (values) => {
     setSubmitting(true);
     try {
-      await dispatch(addBalance({ getAccessTokenSilently, values })).unwrap();
+      const token = await getAccessTokenSilently();
+      await dispatch(addBalance({ token, values })).unwrap();
       enqueueSnackbar("Query added", { variant: "success", action });
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error as string, { variant: "error" });
+      enqueueSnackbar((error as ErrorMessage).message, { variant: "error" });
     }
     setSubmitting(false);
   };

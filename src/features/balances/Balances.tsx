@@ -4,10 +4,12 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid, { GridProps } from "@mui/material/Grid";
+import { useSnackbar } from "notistack";
 import React from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { ErrorMessage } from "../../common/types";
 import Balance from "./Balance";
 import {
   fetchBalances,
@@ -26,10 +28,21 @@ const Balances = ({ ...props }: GridProps) => {
   const error = useAppSelector(selectBalancesError);
   const page = useAppSelector(selectBalancesPage);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   return (
     <>
       <InfiniteScroll
-        loadMore={() => dispatch(fetchBalances({ getAccessTokenSilently }))}
+        loadMore={async () => {
+          try {
+            const token = await getAccessTokenSilently();
+            dispatch(fetchBalances({ token }));
+          } catch (error) {
+            enqueueSnackbar((error as ErrorMessage).message, {
+              variant: "error",
+            });
+          }
+        }}
         hasMore={page !== -1 && status !== "failed"}
         threshold={100}
       >
@@ -53,9 +66,16 @@ const Balances = ({ ...props }: GridProps) => {
           action={
             <Button
               color="inherit"
-              onClick={() =>
-                dispatch(fetchBalances({ getAccessTokenSilently }))
-              }
+              onClick={async () => {
+                try {
+                  const token = await getAccessTokenSilently();
+                  dispatch(fetchBalances({ token }));
+                } catch (error) {
+                  enqueueSnackbar((error as ErrorMessage).message, {
+                    variant: "error",
+                  });
+                }
+              }}
             >
               Retry
             </Button>
