@@ -82,7 +82,7 @@ const QueryButton = ({ render }: QueryButtonProps) => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
     }
-  }, []);
+  }, [networksStatus]);
 
   useEffect(() => {
     if (isSubmitSuccessful) {

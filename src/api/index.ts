@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { QueryForm } from "../common/types";
+import { Pagination, QueryForm } from "../common/types";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -16,9 +16,10 @@ export const deleteWallet = (token: string, id: number) =>
   api.delete(`/wallet/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-export const fetchBalances = (token: string) =>
+export const fetchBalances = (token: string, next?: Pagination) =>
   api.get("/wallet/balances", {
     headers: { Authorization: `Bearer ${token}` },
+    params: next,
   });
 export const fetchBalance = (token: string, id: number) =>
   api.get(`/wallet/balances/${id}`, {

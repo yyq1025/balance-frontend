@@ -24,7 +24,7 @@ const Networks = ({ ...props }: GridProps) => {
     if (status === "idle") {
       dispatch(fetchNetworks());
     }
-  }, []);
+  }, [status]);
 
   return (
     <>

@@ -40,11 +40,21 @@ root.render(
                 <Route path="/" element={<App />}>
                   <Route
                     index
-                    element={<NetworksView maxWidth="lg" sx={{ py: 2 }} />}
+                    element={
+                      <NetworksView
+                        maxWidth="lg"
+                        sx={{ pt: 2, pb: { xs: 10, md: 2 } }}
+                      />
+                    }
                   />
                   <Route
                     path="queries"
-                    element={<QueriesView maxWidth="lg" sx={{ py: 2 }} />}
+                    element={
+                      <QueriesView
+                        maxWidth="lg"
+                        sx={{ pt: 2, pb: { xs: 10, md: 2 } }}
+                      />
+                    }
                   />
                 </Route>
               </Routes>

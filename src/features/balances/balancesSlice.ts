@@ -8,7 +8,12 @@ import { AxiosError } from "axios";
 
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import { ErrorResponse, QueryForm, Status } from "../../common/types";
+import {
+  ErrorMessage,
+  Pagination,
+  QueryForm,
+  Status,
+} from "../../common/types";
 
 interface Balance {
   id: number;
@@ -19,11 +24,24 @@ interface Balance {
   balance: string;
 }
 
+interface BalancesResponse {
+  balances: Balance[];
+  next: Pagination;
+}
+
+interface BalanceResponse {
+  balance: Balance;
+}
+
+interface DeleteResponse {
+  ids: number[];
+}
+
 type GetAccessTokenSilentlyType =
   Auth0ContextInterface["getAccessTokenSilently"];
 
 export const balancesAdapter = createEntityAdapter<Balance>({
-  sortComparer: (a, b) => a.id - b.id,
+  sortComparer: (a, b) => b.id - a.id,
 });
 
 const initialState = balancesAdapter.getInitialState<Status>({
@@ -32,53 +50,54 @@ const initialState = balancesAdapter.getInitialState<Status>({
 });
 
 export const fetchBalances = createAsyncThunk<
-  Balance[],
+  BalancesResponse,
   { getAccessTokenSilently: GetAccessTokenSilentlyType },
-  { rejectValue: string }
+  { state: RootState; rejectValue: ErrorMessage }
 >(
   "balances/fetchBalances",
-  async ({ getAccessTokenSilently }, { rejectWithValue }) => {
+  async ({ getAccessTokenSilently }, { getState, rejectWithValue }) => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await api.fetchBalances(token);
-      return response.data.balances;
+      const response = await api.fetchBalances(token, getState().balances.next);
+      return response.data;
     } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
+      const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       } else {
-        return rejectWithValue(err.message);
+        return rejectWithValue({ message: err.message });
       }
     }
-  }
+  },
+  { condition: (_, { getState }) => getState().balances.status !== "loading" }
 );
 
 export const addBalance = createAsyncThunk<
-  Balance,
+  BalanceResponse,
   { getAccessTokenSilently: GetAccessTokenSilentlyType; values: QueryForm },
-  { rejectValue: string }
+  { rejectValue: ErrorMessage }
 >(
   "balances/addBalance",
   async ({ getAccessTokenSilently, values }, { rejectWithValue }) => {
     try {
       const token = await getAccessTokenSilently();
       const response = await api.createWallet(token, values);
-      return response.data.balance;
+      return response.data;
     } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
+      const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       } else {
-        return rejectWithValue(err.message);
+        return rejectWithValue({ message: err.message });
       }
     }
   }
 );
 
 export const fetchBalance = createAsyncThunk<
-  Balance,
+  BalanceResponse,
   { getAccessTokenSilently: GetAccessTokenSilentlyType; id: number },
-  { rejectValue: string }
+  { rejectValue: ErrorMessage }
 >(
   "balances/fetchBalance",
   async ({ getAccessTokenSilently, id }, { rejectWithValue }) => {
@@ -87,20 +106,20 @@ export const fetchBalance = createAsyncThunk<
       const response = await api.fetchBalance(token, id);
       return response.data.balance;
     } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
+      const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       } else {
-        return rejectWithValue(err.message);
+        return rejectWithValue({ message: err.message });
       }
     }
   }
 );
 
 export const deleteWallets = createAsyncThunk<
-  number[],
+  DeleteResponse,
   { getAccessTokenSilently: GetAccessTokenSilentlyType; id: number },
-  { rejectValue: string }
+  { rejectValue: ErrorMessage }
 >(
   "balances/deleteBalances",
   async ({ getAccessTokenSilently, id }, { rejectWithValue }) => {
@@ -109,11 +128,11 @@ export const deleteWallets = createAsyncThunk<
       const response = await api.deleteWallet(token, id);
       return response.data.ids;
     } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
+      const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       } else {
-        return rejectWithValue(err.message);
+        return rejectWithValue({ message: err.message });
       }
     }
   }
@@ -132,20 +151,22 @@ export const balanecsSlice = createSlice({
       })
       .addCase(fetchBalances.fulfilled, (state, action) => {
         state.status = "succeeded";
-        balancesAdapter.setAll(state, action.payload);
+        console.log(action.payload);
+        state.next = action.payload.next;
+        balancesAdapter.upsertMany(state, action.payload.balances);
       })
       .addCase(fetchBalances.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || null;
+        state.error = action.payload?.message || null;
       })
       .addCase(addBalance.fulfilled, (state, action) => {
-        balancesAdapter.addOne(state, action.payload);
+        balancesAdapter.addOne(state, action.payload.balance);
       })
       .addCase(fetchBalance.fulfilled, (state, action) => {
-        balancesAdapter.upsertOne(state, action.payload);
+        balancesAdapter.upsertOne(state, action.payload.balance);
       })
       .addCase(deleteWallets.fulfilled, (state, action) => {
-        balancesAdapter.removeMany(state, action.payload);
+        balancesAdapter.removeMany(state, action.payload.ids);
       });
   },
 });
@@ -157,5 +178,7 @@ export const { selectIds: selectBalanceIds, selectById: selectBalanceById } =
 
 export const selectBalancesStatus = (state: RootState) => state.balances.status;
 export const selectBalancesError = (state: RootState) => state.balances.error;
+export const selectBalancesPage = (state: RootState) =>
+  state.balances.next?.page;
 
 export default balanecsSlice.reducer;

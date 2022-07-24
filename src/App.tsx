@@ -166,7 +166,12 @@ const App = () => {
                 {isAuthenticated ? (
                   <QueryButton
                     render={(params) => (
-                      <Fab {...params} color="primary" variant="extended">
+                      <Fab
+                        {...params}
+                        color="primary"
+                        variant="extended"
+                        id="Fab"
+                      >
                         <AddIcon sx={{ mr: 1 }} />
                         Add query
                       </Fab>

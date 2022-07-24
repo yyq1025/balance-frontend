@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 
 import * as api from "../../api";
 import type { RootState } from "../../app/store";
-import { ErrorResponse, Status } from "../../common/types";
+import { ErrorMessage, Status } from "../../common/types";
 
 interface Network {
   chainId: string;
@@ -15,6 +15,10 @@ interface Network {
   url: string;
   symbol: string;
   explorer: string;
+}
+
+interface NetworksResponse {
+  networks: Network[];
 }
 
 const networksAdapter = createEntityAdapter<Network>({
@@ -27,24 +31,31 @@ const initialState = networksAdapter.getInitialState<Status>({
 });
 
 export const fetchNetworks = createAsyncThunk<
-  Network[],
+  NetworksResponse,
   void,
   {
-    rejectValue: string;
+    state: RootState;
+    rejectValue: ErrorMessage;
   }
->("networks/fetchNetworks", async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.fetchNetworks();
-    return response.data.networks;
-  } catch (error) {
-    const err = error as AxiosError<ErrorResponse>;
-    if (err.response?.data) {
-      return rejectWithValue(err.response.data.message);
-    } else {
-      return rejectWithValue(err.message);
+>(
+  "networks/fetchNetworks",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.fetchNetworks();
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError<ErrorMessage>;
+      if (err.response?.data) {
+        return rejectWithValue(err.response.data);
+      } else {
+        return rejectWithValue({ message: err.message });
+      }
     }
+  },
+  {
+    condition: (_, { getState }) => getState().networks.status === "idle",
   }
-});
+);
 
 export const networksSlice = createSlice({
   name: "networks",
@@ -57,11 +68,11 @@ export const networksSlice = createSlice({
       })
       .addCase(fetchNetworks.fulfilled, (state, action) => {
         state.status = "succeeded";
-        networksAdapter.setAll(state, action.payload);
+        networksAdapter.setAll(state, action.payload.networks);
       })
       .addCase(fetchNetworks.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || null;
+        state.error = action.payload?.message || null;
       });
   },
 });
