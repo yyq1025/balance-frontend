@@ -104,7 +104,7 @@ export const fetchBalance = createAsyncThunk<
     try {
       const token = await getAccessTokenSilently();
       const response = await api.fetchBalance(token, id);
-      return response.data.balance;
+      return response.data;
     } catch (error) {
       const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
@@ -126,7 +126,7 @@ export const deleteWallets = createAsyncThunk<
     try {
       const token = await getAccessTokenSilently();
       const response = await api.deleteWallet(token, id);
-      return response.data.ids;
+      return response.data;
     } catch (error) {
       const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
@@ -151,7 +151,6 @@ export const balanecsSlice = createSlice({
       })
       .addCase(fetchBalances.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log(action.payload);
         state.next = action.payload.next;
         balancesAdapter.upsertMany(state, action.payload.balances);
       })

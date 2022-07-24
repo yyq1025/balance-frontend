@@ -53,7 +53,7 @@ export const fetchNetworks = createAsyncThunk<
     }
   },
   {
-    condition: (_, { getState }) => getState().networks.status === "idle",
+    condition: (_, { getState }) => getState().networks.status !== "loading",
   }
 );
 
