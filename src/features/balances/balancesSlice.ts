@@ -59,9 +59,8 @@ export const fetchBalances = createAsyncThunk<
       const err = error as AxiosError<ErrorMessage>;
       if (err.response?.data) {
         return rejectWithValue(err.response.data);
-      } else {
-        return rejectWithValue({ message: err.message });
       }
+      return rejectWithValue({ message: err.message });
     }
   },
   { condition: (_, { getState }) => getState().balances.status !== "loading" }
@@ -79,9 +78,8 @@ export const addBalance = createAsyncThunk<
     const err = error as AxiosError<ErrorMessage>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data);
-    } else {
-      return rejectWithValue({ message: err.message });
     }
+    return rejectWithValue({ message: err.message });
   }
 });
 
@@ -97,9 +95,8 @@ export const fetchBalance = createAsyncThunk<
     const err = error as AxiosError<ErrorMessage>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data);
-    } else {
-      return rejectWithValue({ message: err.message });
     }
+    return rejectWithValue({ message: err.message });
   }
 });
 
@@ -115,9 +112,8 @@ export const deleteWallets = createAsyncThunk<
     const err = error as AxiosError<ErrorMessage>;
     if (err.response?.data) {
       return rejectWithValue(err.response.data);
-    } else {
-      return rejectWithValue({ message: err.message });
     }
+    return rejectWithValue({ message: err.message });
   }
 });
 

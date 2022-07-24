@@ -12,7 +12,7 @@ interface CopyableRowProps {
   value: string;
 }
 
-const CopyableRow = ({ label, value }: CopyableRowProps) => {
+function CopyableRow({ label, value }: CopyableRowProps) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     setCopied(true);
@@ -45,6 +45,6 @@ const CopyableRow = ({ label, value }: CopyableRowProps) => {
       </Tooltip>
     </Box>
   );
-};
+}
 
 export default CopyableRow;

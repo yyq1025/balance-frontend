@@ -22,13 +22,37 @@ import QueryButton from "./QueryButton";
 
 const Balances = ({ ...props }: GridProps) => {
   const dispatch = useAppDispatch();
-  const { getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, user, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
   const balanceIds = useAppSelector(selectBalanceIds);
   const status = useAppSelector(selectBalancesStatus);
   const error = useAppSelector(selectBalancesError);
   const page = useAppSelector(selectBalancesPage);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  if (!isAuthenticated) {
+    return (
+      <Alert
+        severity="info"
+        action={
+          <Button color="inherit" onClick={loginWithRedirect}>
+            Login
+          </Button>
+        }
+      >
+        <AlertTitle>Info</AlertTitle>Login to check balances
+      </Alert>
+    );
+  }
+
+  if (!user?.email_verified) {
+    return (
+      <Alert severity="warning">
+        <AlertTitle>Warning</AlertTitle>Verify your email to add queries
+      </Alert>
+    );
+  }
 
   return (
     <>

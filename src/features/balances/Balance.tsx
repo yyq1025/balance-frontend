@@ -49,14 +49,12 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
   const balance = useAppSelector((state) =>
     selectBalanceById(state, balanceId)
   );
-  if (!balance) {
-    return null;
-  }
 
   const network = useAppSelector((state) =>
-    selectNetworkByName(state, balance.network)
+    selectNetworkByName(state, balance?.network || "")
   );
-  if (!network) {
+
+  if (!balance || !network) {
     return null;
   }
 

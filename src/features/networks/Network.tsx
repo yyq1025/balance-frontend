@@ -30,7 +30,7 @@ interface ProviderRpcError extends Error {
   data?: unknown;
 }
 
-const Network = ({ networkName }: { networkName: EntityId }) => {
+function Network({ networkName }: { networkName: EntityId }) {
   const network = useAppSelector((state) =>
     selectNetworkByName(state, networkName)
   );
@@ -69,8 +69,8 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
                 },
               ],
             });
-          } catch (e) {
-            enqueueSnackbar((e as ProviderRpcError).message, {
+          } catch (error) {
+            enqueueSnackbar((error as ProviderRpcError).message, {
               variant: "error",
             });
           }
@@ -126,6 +126,6 @@ const Network = ({ networkName }: { networkName: EntityId }) => {
       </CardActions>
     </Card>
   );
-};
+}
 
 export default Network;

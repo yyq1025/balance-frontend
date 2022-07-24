@@ -27,7 +27,7 @@ interface QueryButtonProps {
   render: (params: ButtonBaseProps) => ReactNode;
 }
 
-const QueryButton = ({ render }: QueryButtonProps) => {
+function QueryButton({ render }: QueryButtonProps) {
   const dispatch = useAppDispatch();
   const networksStatus = useAppSelector(selectNetworksStatus);
   const networkNames = useAppSelector(selectNetworkNames);
@@ -73,7 +73,6 @@ const QueryButton = ({ render }: QueryButtonProps) => {
       await dispatch(addBalance({ token, values })).unwrap();
       enqueueSnackbar("Query added", { variant: "success", action });
     } catch (error) {
-      console.error(error);
       enqueueSnackbar((error as ErrorMessage).message, { variant: "error" });
     }
     setSubmitting(false);
@@ -83,14 +82,14 @@ const QueryButton = ({ render }: QueryButtonProps) => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
     }
-  }, [networksStatus]);
+  }, [dispatch, networksStatus]);
 
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset({ address: "", network: "Ethereum", token: "" });
       setVisible(false);
     }
-  }, [isSubmitSuccessful]);
+  }, [isSubmitSuccessful, reset]);
 
   return (
     <>
@@ -169,6 +168,6 @@ const QueryButton = ({ render }: QueryButtonProps) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default QueryButton;

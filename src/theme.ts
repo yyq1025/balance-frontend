@@ -21,8 +21,9 @@ const theme = createTheme({
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: (theme) => ({
-        [theme.breakpoints.down("sm")]: {
+      styleOverrides: (themeParam) => ({
+        "#root": { display: "flex", minHeight: "100vh" },
+        [themeParam.breakpoints.down("sm")]: {
           ".SnackbarContainer-bottom": { bottom: "72px !important" },
         },
       }),

@@ -14,7 +14,7 @@ import {
   selectNetworksStatus,
 } from "./networksSlice";
 
-const Networks = ({ ...props }: GridProps) => {
+function Networks({ ...props }: GridProps) {
   const dispatch = useAppDispatch();
   const networkNames = useAppSelector(selectNetworkNames);
   const status = useAppSelector(selectNetworksStatus);
@@ -24,7 +24,7 @@ const Networks = ({ ...props }: GridProps) => {
     if (status === "idle") {
       dispatch(fetchNetworks());
     }
-  }, [status]);
+  }, [dispatch, status]);
 
   return (
     <>
@@ -58,6 +58,6 @@ const Networks = ({ ...props }: GridProps) => {
       )}
     </>
   );
-};
+}
 
 export default Networks;

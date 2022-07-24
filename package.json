@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "1.10.2",
-    "@emotion/react": "11.9.3",
-    "@emotion/styled": "11.9.3",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
     "@ethersproject/address": "5.6.1",
     "@ethersproject/constants": "5.6.1",
     "@metamask/providers": "9.0.0",
@@ -23,7 +23,6 @@
     "@types/react-infinite-scroller": "^1.2.3",
     "axios": "0.27.2",
     "clipboard-copy": "4.0.1",
-    "eslint-plugin-prettier": "4.2.1",
     "notistack": "2.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -61,10 +60,9 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
-    "eslint": "8.20.0",
+    "eslint": "8.2.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-react": "7.30.1",
-    "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-config-react-app": "^7.0.1",
     "prettier": "2.7.1",
     "typescript": "4.7.4"
   }
