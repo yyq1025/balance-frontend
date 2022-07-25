@@ -32,7 +32,7 @@ function QueryButton({ render }: QueryButtonProps) {
   const networksStatus = useAppSelector(selectNetworksStatus);
   const networkNames = useAppSelector(selectNetworkNames);
   const { getAccessTokenSilently, user } = useAuth0();
-  const [visible, setVisible] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const disabled = networksStatus !== "succeeded" || !user?.email_verified;
 
@@ -72,7 +72,7 @@ function QueryButton({ render }: QueryButtonProps) {
       const token = await getAccessTokenSilently();
       await dispatch(addBalance({ token, values })).unwrap();
       enqueueSnackbar("Query added", { variant: "success", action });
-      setVisible(false);
+      setOpen(false);
     } catch (error) {
       enqueueSnackbar((error as ErrorMessage).message, { variant: "error" });
     } finally {
@@ -94,8 +94,8 @@ function QueryButton({ render }: QueryButtonProps) {
 
   return (
     <>
-      {render({ disabled, onClick: () => setVisible(true) })}
-      <Dialog open={visible} onClose={() => setVisible(false)} fullWidth>
+      {render({ disabled, onClick: () => setOpen(true) })}
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
         <DialogTitle>Create a new query</DialogTitle>
         <DialogContent>
           <TextField
@@ -154,7 +154,7 @@ function QueryButton({ render }: QueryButtonProps) {
           />
         </DialogContent>
         <DialogActions>
-          <Button disabled={submitting} onClick={() => setVisible(false)}>
+          <Button disabled={submitting} onClick={() => setOpen(false)}>
             Cancel
           </Button>
           <LoadingButton
