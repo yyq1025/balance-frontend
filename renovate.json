@@ -3,6 +3,7 @@
   "extends": [
     "config:js-app",
     ":automergeDigest",
-    ":automergeMinor"
+    ":automergeMinor",
+    ":skipStatusChecks"
   ]
 }
