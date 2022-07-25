@@ -105,8 +105,8 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               <IconButton
                 disabled={syncing}
                 onClick={async () => {
-                  setSyncing(true);
                   try {
+                    setSyncing(true);
                     const token = await getAccessTokenSilently();
                     await dispatch(
                       fetchBalance({ token, id: balance.id })
@@ -118,8 +118,9 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
                     enqueueSnackbar((error as ErrorMessage).message, {
                       variant: "error",
                     });
+                  } finally {
+                    setSyncing(false);
                   }
-                  setSyncing(false);
                 }}
               >
                 {syncing ? (
@@ -183,20 +184,21 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             loading={deleting}
             color="error"
             onClick={async () => {
-              setDeleting(true);
               try {
+                setDeleting(true);
                 const token = await getAccessTokenSilently();
                 await dispatch(
                   deleteWallets({ token, id: balance.id })
                 ).unwrap();
                 enqueueSnackbar("Query deleted", { variant: "success" });
+                setOpen(false);
               } catch (error) {
                 enqueueSnackbar((error as ErrorMessage).message, {
                   variant: "error",
                 });
+              } finally {
+                setDeleting(false);
               }
-              setDeleting(false);
-              setOpen(false);
             }}
           >
             Delete

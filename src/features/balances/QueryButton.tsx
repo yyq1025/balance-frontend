@@ -67,29 +67,30 @@ function QueryButton({ render }: QueryButtonProps) {
   });
 
   const onSubmit: SubmitHandler<QueryForm> = async (values) => {
-    setSubmitting(true);
     try {
+      setSubmitting(true);
       const token = await getAccessTokenSilently();
       await dispatch(addBalance({ token, values })).unwrap();
       enqueueSnackbar("Query added", { variant: "success", action });
+      setVisible(false);
     } catch (error) {
       enqueueSnackbar((error as ErrorMessage).message, { variant: "error" });
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ address: "", network: "Ethereum", token: "" });
+    }
+  }, [isSubmitSuccessful, reset]);
 
   useEffect(() => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
     }
   }, [dispatch, networksStatus]);
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({ address: "", network: "Ethereum", token: "" });
-      setVisible(false);
-    }
-  }, [isSubmitSuccessful, reset]);
 
   return (
     <>
