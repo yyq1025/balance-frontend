@@ -13,7 +13,6 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint"],
   settings: {
     react: {
       version: "detect",
