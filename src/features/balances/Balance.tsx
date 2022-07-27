@@ -86,16 +86,22 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             </Avatar>
           }
           title={
-            balance.balance ? (
+            balance.balance >= 0 ? (
               <Tooltip
-                title={`${balance.balance} ${balance.symbol} @ ${balance.network}`}
+                title={`${balance.balance.toLocaleString("en-US", {
+                  maximumSignificantDigits: 18,
+                })} ${balance.symbol} @ ${balance.network}`}
               >
                 <Typography variant="subtitle2" noWrap>
-                  {`${balance.balance} ${balance.symbol}`}
+                  {`${balance.balance.toLocaleString("en-US", {
+                    maximumSignificantDigits: 18,
+                  })} ${balance.symbol}`}
                 </Typography>
               </Tooltip>
             ) : (
-              "Cannot get balance"
+              <Typography variant="subtitle2" noWrap>
+                Cannot get balance
+              </Typography>
             )
           }
           subheader={balance.network}

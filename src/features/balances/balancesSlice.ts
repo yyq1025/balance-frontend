@@ -20,7 +20,7 @@ interface Balance {
   network: string;
   token: string;
   symbol: string;
-  balance: string;
+  balance: number;
 }
 
 interface BalancesResponse {
@@ -90,6 +90,7 @@ export const fetchBalance = createAsyncThunk<
 >("balances/fetchBalance", async ({ token, id }, { rejectWithValue }) => {
   try {
     const response = await api.fetchBalance(token, id);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ErrorMessage>;
