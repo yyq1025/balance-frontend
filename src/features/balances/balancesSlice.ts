@@ -33,7 +33,7 @@ interface BalanceResponse {
 }
 
 interface DeleteResponse {
-  ids: number[];
+  id: number;
 }
 
 export const balancesAdapter = createEntityAdapter<Balance>({
@@ -145,7 +145,7 @@ export const balanecsSlice = createSlice({
         balancesAdapter.upsertOne(state, action.payload.balance);
       })
       .addCase(deleteWallets.fulfilled, (state, action) => {
-        balancesAdapter.removeMany(state, action.payload.ids);
+        balancesAdapter.removeOne(state, action.payload.id);
       });
   },
 });
