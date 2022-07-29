@@ -12,7 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { SnackbarKey, useSnackbar } from "notistack";
 import React, { ReactNode, useEffect, useState } from "react";
-import equal from "react-fast-compare";
+import isEqual from "react-fast-compare";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -147,7 +147,7 @@ function QueryButton({ render }: QueryButtonProps) {
                 disabled={submitting}
                 options={networks}
                 getOptionLabel={(option) => option.name}
-                isOptionEqualToValue={equal}
+                isOptionEqualToValue={isEqual}
                 renderInput={(params) => (
                   <TextField
                     {...params}
