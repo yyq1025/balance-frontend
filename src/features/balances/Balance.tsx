@@ -30,7 +30,6 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { ErrorMessage } from "../../common/types";
 import CopyableRow from "../CopyableRow";
-import { selectNetworkByName } from "../networks/networksSlice";
 import {
   deleteWallets,
   fetchBalance,
@@ -50,11 +49,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
     selectBalanceById(state, balanceId)
   );
 
-  const network = useAppSelector((state) =>
-    selectNetworkByName(state, balance?.network || "")
-  );
-
-  if (!balance || !network) {
+  if (!balance) {
     return null;
   }
 
@@ -74,10 +69,10 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
             <Avatar
               src={
                 token === AddressZero
-                  ? `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                  ? `https://assets-cdn.trustwallet.com/blockchains/${balance.networkName
                       .replace("-", "")
                       .toLowerCase()}/info/logo.png`
-                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.network
+                  : `https://assets-cdn.trustwallet.com/blockchains/${balance.networkName
                       .replace("-", "")
                       .toLowerCase()}/assets/${token}/logo.png`
               }
@@ -90,7 +85,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               <Tooltip
                 title={`${balance.balance.toLocaleString("en-US", {
                   maximumSignificantDigits: 18,
-                })} ${balance.symbol} @ ${balance.network}`}
+                })} ${balance.symbol} @ ${balance.networkName}`}
               >
                 <Typography variant="subtitle2" noWrap>
                   {`${balance.balance.toLocaleString("en-US", {
@@ -104,7 +99,7 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               </Typography>
             )
           }
-          subheader={balance.network}
+          subheader={balance.networkName}
           subheaderTypographyProps={{ noWrap: true }}
           action={
             <Tooltip title="Refresh balance">
@@ -157,8 +152,8 @@ const Balance = ({ balanceId }: { balanceId: EntityId }) => {
               color="inherit"
               href={
                 token === AddressZero
-                  ? `${network.explorer}/address/${address}`
-                  : `${network.explorer}/token/${token}?a=${address}`
+                  ? `${balance.network.explorer}/address/${address}`
+                  : `${balance.network.explorer}/token/${token}?a=${address}`
               }
               target="_blank"
               rel="noreferrer"

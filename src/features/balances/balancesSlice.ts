@@ -13,12 +13,21 @@ import {
   QueryForm,
   Status,
 } from "../../common/types";
+import { Network } from "../networks/networksSlice";
 
-interface Balance {
+export interface Wallet {
   id: number;
   address: string;
-  network: string;
+  networkName: string;
   token: string;
+  network: Network;
+}
+
+interface Balance extends Wallet {
+  // id: number;
+  // address: string;
+  // networkName: string;
+  // token: string;
   symbol: string;
   balance: number;
 }
@@ -72,6 +81,7 @@ export const addBalance = createAsyncThunk<
   { rejectValue: ErrorMessage }
 >("balances/addBalance", async ({ token, values }, { rejectWithValue }) => {
   try {
+    console.log(values);
     const response = await api.createWallet(token, values);
     return response.data;
   } catch (error) {

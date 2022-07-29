@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { isAddress } from "@ethersproject/address";
+import { AddressZero } from "@ethersproject/constants";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
@@ -11,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { SnackbarKey, useSnackbar } from "notistack";
 import React, { ReactNode, useEffect, useState } from "react";
+import equal from "react-fast-compare";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { ErrorMessage, QueryForm } from "../../common/types";
 import {
   fetchNetworks,
-  selectNetworkNames,
+  selectNetworks,
   selectNetworksStatus,
 } from "../networks/networksSlice";
 import { addBalance } from "./balancesSlice";
@@ -30,7 +32,7 @@ interface QueryButtonProps {
 function QueryButton({ render }: QueryButtonProps) {
   const dispatch = useAppDispatch();
   const networksStatus = useAppSelector(selectNetworksStatus);
-  const networkNames = useAppSelector(selectNetworkNames);
+  const networks = useAppSelector(selectNetworks);
   const { getAccessTokenSilently, user } = useAuth0();
   const [open, setOpen] = useState(false);
 
@@ -59,18 +61,28 @@ function QueryButton({ render }: QueryButtonProps) {
     register,
     control,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors, isSubmitSuccessful },
   } = useForm<QueryForm>({
     mode: "onChange",
-    defaultValues: { address: "", network: "Ethereum", token: "" },
+    defaultValues: {
+      address: "",
+      network: null,
+      token: "",
+    },
   });
 
   const onSubmit: SubmitHandler<QueryForm> = async (values) => {
     try {
       setSubmitting(true);
       const token = await getAccessTokenSilently();
-      await dispatch(addBalance({ token, values })).unwrap();
+      await dispatch(
+        addBalance({
+          token,
+          values: { ...values, token: values.token || AddressZero },
+        })
+      ).unwrap();
       enqueueSnackbar("Query added", { variant: "success", action });
       setOpen(false);
     } catch (error) {
@@ -82,15 +94,25 @@ function QueryButton({ render }: QueryButtonProps) {
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ address: "", network: "Ethereum", token: "" });
+      reset({
+        address: "",
+        network: null,
+        token: "",
+      });
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful, networks, reset]);
 
   useEffect(() => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
     }
   }, [dispatch, networksStatus]);
+
+  useEffect(() => {
+    if (networks.length > 0) {
+      setValue("network", networks.find((n) => n.name === "Ethereum") || null);
+    }
+  }, [networks, setValue]);
 
   return (
     <>
@@ -119,11 +141,13 @@ function QueryButton({ render }: QueryButtonProps) {
             render={({ field: { ref, onChange, ...field } }) => (
               <Autocomplete
                 {...field}
-                disableClearable
+                // disableClearable
                 onChange={(_, v) => onChange(v)}
                 fullWidth
                 disabled={submitting}
-                options={networkNames}
+                options={networks}
+                getOptionLabel={(option) => option.name}
+                isOptionEqualToValue={equal}
                 renderInput={(params) => (
                   <TextField
                     {...params}

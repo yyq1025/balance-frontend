@@ -1,3 +1,5 @@
+import { Network } from "../features/networks/networksSlice";
+
 export interface ErrorMessage {
   message: string;
 }
@@ -16,6 +18,6 @@ export interface Status {
 
 export interface QueryForm {
   address: string;
-  network: string;
+  network: Network | null;
   token: string;
 }

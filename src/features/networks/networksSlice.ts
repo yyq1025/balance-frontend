@@ -9,7 +9,7 @@ import * as api from "../../api";
 import type { RootState } from "../../app/store";
 import { ErrorMessage, Status } from "../../common/types";
 
-interface Network {
+export interface Network {
   chainId: string;
   name: string;
   url: string;
@@ -80,6 +80,7 @@ export const networksSlice = createSlice({
 export const {
   selectIds: selectNetworkNames,
   selectById: selectNetworkByName,
+  selectAll: selectNetworks,
 } = networksAdapter.getSelectors((state: RootState) => state.networks);
 
 export const selectNetworksStatus = (state: RootState) => state.networks.status;
