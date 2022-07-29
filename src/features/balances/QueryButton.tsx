@@ -61,7 +61,6 @@ function QueryButton({ render }: QueryButtonProps) {
     register,
     control,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors, isSubmitSuccessful },
   } = useForm<QueryForm>({
@@ -99,20 +98,14 @@ function QueryButton({ render }: QueryButtonProps) {
   }, [dispatch, networksStatus]);
 
   useEffect(() => {
-    if (networks.length > 0) {
-      setValue("network", networks.find((n) => n.name === "Ethereum") || null);
-    }
-  }, [networks, setValue]);
-
-  useEffect(() => {
     if (isSubmitSuccessful) {
       reset({
         address: "",
-        network: networks.find((n) => n.name === "Ethereum") || null,
+        network: null,
         token: "",
       });
     }
-  }, [isSubmitSuccessful, networks, reset]);
+  }, [isSubmitSuccessful, reset]);
 
   return (
     <>
