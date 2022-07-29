@@ -27,7 +27,7 @@ interface Balance {
 
 interface BalancesResponse {
   balances: Balance[];
-  next: Pagination;
+  next: Pagination | null;
 }
 
 interface BalanceResponse {
@@ -42,9 +42,12 @@ export const balancesAdapter = createEntityAdapter<Balance>({
   sortComparer: (a, b) => b.id - a.id,
 });
 
-const initialState = balancesAdapter.getInitialState<Status>({
+const initialState = balancesAdapter.getInitialState<
+  Status & { next: Pagination | null }
+>({
   status: "idle",
   error: null,
+  next: null,
 });
 
 export const fetchBalances = createAsyncThunk<
@@ -160,7 +163,6 @@ export const { selectIds: selectBalanceIds, selectById: selectBalanceById } =
 
 export const selectBalancesStatus = (state: RootState) => state.balances.status;
 export const selectBalancesError = (state: RootState) => state.balances.error;
-export const selectBalancesPage = (state: RootState) =>
-  state.balances.next?.page;
+export const selectBalancesNext = (state: RootState) => state.balances.next;
 
 export default balanecsSlice.reducer;

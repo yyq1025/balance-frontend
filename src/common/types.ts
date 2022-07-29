@@ -5,15 +5,14 @@ export interface ErrorMessage {
 }
 
 export interface Pagination {
-  idLte?: number;
-  page?: number;
-  pageSize?: number;
+  idLte: number;
+  page: number;
+  pageSize: number;
 }
 
 export interface Status {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
-  next?: Pagination;
 }
 
 export interface QueryForm {

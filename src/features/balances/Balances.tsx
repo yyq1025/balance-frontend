@@ -15,7 +15,7 @@ import {
   fetchBalances,
   selectBalanceIds,
   selectBalancesError,
-  selectBalancesPage,
+  selectBalancesNext,
   selectBalancesStatus,
 } from "./balancesSlice";
 import QueryButton from "./QueryButton";
@@ -27,7 +27,7 @@ const Balances = ({ ...props }: GridProps) => {
   const balanceIds = useAppSelector(selectBalanceIds);
   const status = useAppSelector(selectBalancesStatus);
   const error = useAppSelector(selectBalancesError);
-  const page = useAppSelector(selectBalancesPage);
+  const next = useAppSelector(selectBalancesNext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -67,7 +67,7 @@ const Balances = ({ ...props }: GridProps) => {
             });
           }
         }}
-        hasMore={page !== -1 && status !== "failed"}
+        hasMore={status !== "failed" && (status === "idle" || !!next)}
         threshold={100}
       >
         <Grid {...props} container spacing={2}>

@@ -16,7 +16,7 @@ export const deleteWallet = (token: string, id: number) =>
   api.delete(`/wallet/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-export const fetchBalances = (token: string, next?: Pagination) =>
+export const fetchBalances = (token: string, next: Pagination | null) =>
   api.get("/wallet/balances", {
     headers: { Authorization: `Bearer ${token}` },
     params: next,
