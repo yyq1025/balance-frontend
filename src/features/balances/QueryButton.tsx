@@ -93,16 +93,6 @@ function QueryButton({ render }: QueryButtonProps) {
   };
 
   useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({
-        address: "",
-        network: null,
-        token: "",
-      });
-    }
-  }, [isSubmitSuccessful, networks, reset]);
-
-  useEffect(() => {
     if (networksStatus === "idle") {
       dispatch(fetchNetworks());
     }
@@ -113,6 +103,16 @@ function QueryButton({ render }: QueryButtonProps) {
       setValue("network", networks.find((n) => n.name === "Ethereum") || null);
     }
   }, [networks, setValue]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({
+        address: "",
+        network: networks.find((n) => n.name === "Ethereum") || null,
+        token: "",
+      });
+    }
+  }, [isSubmitSuccessful, networks, reset]);
 
   return (
     <>
