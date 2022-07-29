@@ -15,19 +15,12 @@ import {
 } from "../../common/types";
 import { Network } from "../networks/networksSlice";
 
-export interface Wallet {
+interface Balance {
   id: number;
   address: string;
   networkName: string;
   token: string;
   network: Network;
-}
-
-interface Balance extends Wallet {
-  // id: number;
-  // address: string;
-  // networkName: string;
-  // token: string;
   symbol: string;
   balance: number;
 }
