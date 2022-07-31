@@ -9,19 +9,19 @@ const api = axios.create({
 
 export const fetchNetworks = () => api.get("/networks");
 export const createWallet = (token: string, values: QueryForm) =>
-  api.post("/wallet", values, {
+  api.post("/wallets", values, {
     headers: { Authorization: `Bearer ${token}` },
   });
 export const deleteWallet = (token: string, id: number) =>
-  api.delete(`/wallet/${id}`, {
+  api.delete(`/wallets/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 export const fetchBalances = (token: string, next: Pagination | null) =>
-  api.get("/wallet/balances", {
+  api.get("/wallets", {
     headers: { Authorization: `Bearer ${token}` },
     params: next,
   });
 export const fetchBalance = (token: string, id: number) =>
-  api.get(`/wallet/balances/${id}`, {
+  api.get(`/wallets/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
