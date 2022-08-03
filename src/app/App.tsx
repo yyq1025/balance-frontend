@@ -24,8 +24,8 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import QueryButton from "./features/balances/QueryButton";
-import UserButton from "./features/UserButton";
+import QueryButton from "../features/balances/QueryButton";
+import UserButton from "../features/UserButton";
 
 const drawerWidth = 240;
 

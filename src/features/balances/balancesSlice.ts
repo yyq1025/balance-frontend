@@ -5,8 +5,8 @@ import {
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
-import * as api from "../../api";
 import type { RootState } from "../../app/store";
+import * as api from "../../common/api";
 import {
   ErrorMessage,
   Pagination,

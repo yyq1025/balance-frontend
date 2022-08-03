@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { Pagination, QueryForm } from "../common/types";
+import { Pagination, QueryForm } from "./types";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
