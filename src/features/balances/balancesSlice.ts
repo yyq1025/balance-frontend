@@ -77,7 +77,6 @@ export const addBalance = createAsyncThunk<
   { rejectValue: ErrorMessage }
 >("balances/addBalance", async ({ token, values }, { rejectWithValue }) => {
   try {
-    console.log(values);
     const response = await api.createWallet(token, values);
     return response.data;
   } catch (error) {
@@ -96,7 +95,6 @@ export const fetchBalance = createAsyncThunk<
 >("balances/fetchBalance", async ({ token, id }, { rejectWithValue }) => {
   try {
     const response = await api.fetchBalance(token, id);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ErrorMessage>;
@@ -136,9 +134,9 @@ export const balanecsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchBalances.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.next = action.payload.next;
         balancesAdapter.upsertMany(state, action.payload.balances);
+        state.next = action.payload.next;
+        state.status = "succeeded";
       })
       .addCase(fetchBalances.rejected, (state, action) => {
         state.status = "failed";

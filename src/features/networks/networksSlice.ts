@@ -67,8 +67,8 @@ export const networksSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchNetworks.fulfilled, (state, action) => {
-        state.status = "succeeded";
         networksAdapter.setAll(state, action.payload.networks);
+        state.status = "succeeded";
       })
       .addCase(fetchNetworks.rejected, (state, action) => {
         state.status = "failed";
