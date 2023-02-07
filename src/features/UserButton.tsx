@@ -14,7 +14,9 @@ const UserButton = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const logoutWithRedirect = () => {
     logout({
-      returnTo: window.location.origin,
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
     });
   };
 
@@ -47,7 +49,7 @@ const UserButton = () => {
         <Button
           variant="outlined"
           startIcon={<LoginIcon />}
-          onClick={loginWithRedirect}
+          onClick={() => loginWithRedirect()}
         >
           Login
         </Button>
