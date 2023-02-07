@@ -36,7 +36,7 @@ const Balances = ({ ...props }: GridProps) => {
       <Alert
         severity="info"
         action={
-          <Button color="inherit" onClick={loginWithRedirect}>
+          <Button color="inherit" onClick={() => loginWithRedirect()}>
             Login
           </Button>
         }

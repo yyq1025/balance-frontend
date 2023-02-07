@@ -176,7 +176,7 @@ const App = () => {
               <Fab
                 color="primary"
                 variant="extended"
-                onClick={loginWithRedirect}
+                onClick={() => loginWithRedirect()}
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Login
@@ -213,7 +213,11 @@ const App = () => {
             )}
           />
         ) : (
-          <Fab color="primary" variant="extended" onClick={loginWithRedirect}>
+          <Fab
+            color="primary"
+            variant="extended"
+            onClick={() => loginWithRedirect()}
+          >
             <LoginIcon sx={{ mr: 1 }} />
             Login
           </Fab>

@@ -49,7 +49,7 @@ const UserButton = () => {
         <Button
           variant="outlined"
           startIcon={<LoginIcon />}
-          onClick={loginWithRedirect}
+          onClick={() => loginWithRedirect()}
         >
           Login
         </Button>
