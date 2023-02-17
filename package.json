@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "2.0.0",
-    "@emotion/react": "11.10.5",
-    "@emotion/styled": "11.10.5",
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
     "@ethersproject/address": "5.7.0",
     "@ethersproject/constants": "5.7.0",
     "@metamask/providers": "10.2.1",
