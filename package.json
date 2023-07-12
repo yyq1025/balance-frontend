@@ -16,7 +16,7 @@
     "@types/jest": "29.5.3",
     "@types/node": "18.16.19",
     "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@types/react-dom": "18.2.7",
     "@types/react-infinite-scroller": "1.2.3",
     "axios": "1.4.0",
     "clipboard-copy": "4.0.1",
