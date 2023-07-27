@@ -58,7 +58,7 @@
   "devDependencies": {
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "8.45.0",
-    "eslint-config-prettier": "8.8.0",
+    "eslint-config-prettier": "8.9.0",
     "eslint-config-react-app": "7.0.1",
     "typescript": "4.9.5"
   }
