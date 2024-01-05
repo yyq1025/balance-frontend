@@ -18,7 +18,7 @@
     "@types/react": "18.2.46",
     "@types/react-dom": "18.2.18",
     "@types/react-infinite-scroller": "1.2.5",
-    "axios": "1.6.4",
+    "axios": "1.6.5",
     "clipboard-copy": "4.0.1",
     "notistack": "2.0.8",
     "react": "18.2.0",
