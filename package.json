@@ -20,7 +20,7 @@
     "@types/react-infinite-scroller": "1.2.5",
     "axios": "1.6.5",
     "clipboard-copy": "4.0.1",
-    "notistack": "2.0.8",
+    "notistack": "3.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-fast-compare": "3.2.2",
