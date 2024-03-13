@@ -9,7 +9,7 @@
     "@ethersproject/address": "5.7.0",
     "@ethersproject/constants": "5.7.0",
     "@metamask/providers": "14.0.2",
-    "@mui/icons-material": "5.15.12",
+    "@mui/icons-material": "5.15.13",
     "@mui/lab": "5.0.0-alpha.167",
     "@mui/material": "5.15.12",
     "@reduxjs/toolkit": "2.2.1",
