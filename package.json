@@ -5,7 +5,7 @@
   "dependencies": {
     "@auth0/auth0-react": "2.2.4",
     "@emotion/react": "11.11.4",
-    "@emotion/styled": "11.11.0",
+    "@emotion/styled": "11.11.5",
     "@ethersproject/address": "5.7.0",
     "@ethersproject/constants": "5.7.0",
     "@metamask/providers": "14.0.2",
