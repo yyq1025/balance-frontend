@@ -8,7 +8,7 @@
     "@emotion/styled": "11.11.5",
     "@ethersproject/address": "5.7.0",
     "@ethersproject/constants": "5.7.0",
-    "@metamask/providers": "14.0.2",
+    "@metamask/providers": "16.0.0",
     "@mui/icons-material": "5.15.15",
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.15",
